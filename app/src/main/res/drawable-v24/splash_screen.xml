@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Экран загрузки приложения(холодный старт) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+    <!-- Цвет фона -->
+    <item android:drawable="@color/colorBackground"/>
+
+    <!--<item>-->
+        <!--<bitmap android:src="TODO"-->
+                <!--android:gravity="center"/>-->
+    <!--</item>-->
+</layer-list>
