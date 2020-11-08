@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name" translatable="false">InStudy</string>
-    <string name="text_password">Password</string>
-    <string name="text_error">Error</string>
+    <string name="title_password">Password</string>
+    <string name="title_error">Error</string>
     <string name="bt_sign_in">Sign In</string>
     <string name="bt_sign_up">Sign Up</string>
-    <string name="text_email" translatable="false">E-mail</string>
+    <string name="title_email" translatable="false">E-mail</string>
+    <string name="tittle_sign_up_student">Sign Up as Student</string>
+    <string name="tittle_sign_up_school">Sign Up as School</string>
+    <string name="tittle_as_student">I look for school</string>
+    <string name="tittle_as_school">I suggest courses</string>
+    <string name="tittle_confirm_password">Confirm</string>
+    <string name="menu_as_student">as Student</string>
+    <string name="menu_as_school">as School</string>
 </resources>

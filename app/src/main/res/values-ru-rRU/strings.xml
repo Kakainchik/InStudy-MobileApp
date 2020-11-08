@@ -2,6 +2,13 @@
 <resources>
     <string name="bt_sign_in">Вход</string>
     <string name="bt_sign_up">Регистрация</string>
-    <string name="text_error">Ошибка</string>
-    <string name="text_password">Пароль</string>
+    <string name="title_error">Ошибка</string>
+    <string name="title_password">Пароль</string>
+    <string name="tittle_sign_up_student">Зарегестрироваться как студент</string>
+    <string name="tittle_sign_up_school">Зарегестрироваться как школа</string>
+    <string name="tittle_as_student">я ищу школу</string>
+    <string name="tittle_as_school">я предлагаю курсы</string>
+    <string name="tittle_confirm_password">Подтвердить</string>
+    <string name="menu_as_student">как студент</string>
+    <string name="menu_as_school">как школа</string>
 </resources>

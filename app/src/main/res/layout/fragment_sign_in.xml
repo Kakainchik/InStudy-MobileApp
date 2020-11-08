@@ -20,13 +20,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_in_text"
-        android:layout_marginVertical="15dp"
-        android:hint="@string/text_email"
+        android:layout_marginVertical="@dimen/vertical_margin_login_in_activity"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+                android:id="@+id/sign_in_email_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:inputType="textEmailAddress"
+                android:hint="@string/title_email"/>
 
     </com.google.android.material.textfield.TextInputLayout>
     
@@ -35,12 +38,15 @@
         android:id="@+id/sign_in_password_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sign_in_email_input"
-        android:hint="@string/text_password">
+        android:layout_below="@id/sign_in_email_input">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+                android:id="@+id/sign_in_password_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:inputType="textPassword"
+                android:hint="@string/title_password"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,23 +55,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
         android:gravity="end"
         android:layout_below="@id/sign_in_password_input">
 
+        <!-- Регистрации. Показывает два типа: студент, учитель -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/sign_in_register_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_marginEnd="20dp"
-            android:text="@string/bt_sign_up"/>
-        
+                android:id="@+id/sign_in_register_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="@string/bt_sign_up"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <!-- Авторизация -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/sign_in_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bt_sign_up"/>
+            android:text="@string/bt_sign_in"/>
 
     </LinearLayout>
 
