@@ -7,12 +7,10 @@
         android:layout_height="match_parent"
         tools:context=".LoginInActivity">
 
-    <fragment android:id="@+id/fragment_"
+    <FrameLayout android:id="@+id/loginin_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="40dp"
-            android:layout_marginVertical="50dp"
-            android:name="kz.gaudeamus.instudy.SignInFragment"
-            tools:layout="@layout/fragment_sign_in"/>
+            android:layout_marginVertical="50dp"/>
 
 </FrameLayout>

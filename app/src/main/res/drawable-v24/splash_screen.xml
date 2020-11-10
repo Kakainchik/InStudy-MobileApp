@@ -4,8 +4,8 @@
     <!-- Цвет фона -->
     <item android:drawable="@color/colorBackground"/>
 
-    <!--<item>-->
-        <!--<bitmap android:src="TODO"-->
-                <!--android:gravity="center"/>-->
-    <!--</item>-->
+    <item>
+        <bitmap android:src="@drawable/logo"
+                android:gravity="center"/>
+    </item>
 </layer-list>
