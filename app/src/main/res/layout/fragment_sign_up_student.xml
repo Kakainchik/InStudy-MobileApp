@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SignUpStudentFragment">
 
-    <TextView android:id="@+id/sign_up_student_text"
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/email_bitmap"
+            android:layout_width="@dimen/size_icon_login_in"
+            android:layout_height="@dimen/size_icon_login_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_student_email_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_student_email_input"
+            android:src="@drawable/ic_sharp_email_24"/>
+
+    <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/signup_student_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
             android:textAlignment="center"
             android:fontFamily="sans-serif-medium"
             android:textSize="@dimen/title_text_size"
-            android:text="@string/tittle_sign_up_student"/>
+            android:text="@string/title_sign_up_student"/>
 
-    <TextView android:id="@+id/sign_up_student_desc"
+    <!-- Дополнительная надпись -->
+    <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/signup_student_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sign_up_student_text"
+            app:layout_constraintTop_toBottomOf="@id/signup_student_text"
             android:textAlignment="center"
             android:fontFamily="sans-serif-condensed-light"
             android:textSize="@dimen/title_text_smalldescription"
-            android:text="@string/tittle_as_student"/>
+            android:text="@string/title_as_student"/>
 
+    <!-- E-mail -->
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_email_input"
-            android:layout_width="match_parent"
+            android:id="@+id/signup_student_email_input"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sign_up_student_desc"
-            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+            app:layout_constraintTop_toBottomOf="@id/signup_student_desc"
+            app:layout_constraintStart_toEndOf="@id/email_bitmap"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            android:layout_marginStart="15dp">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/sign_up_email_text"
+                android:id="@+id/signup_student_email_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/title_email"
@@ -39,15 +57,26 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_student_password_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_student_password_input"
+            android:src="@drawable/ic_sharp_lock_24"/>
+
+    <!-- Пароль -->
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_password_input"
-            android:layout_width="match_parent"
+            android:id="@+id/signup_student_password_input"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sign_up_email_input"
+            app:layout_constraintTop_toBottomOf="@id/signup_student_email_input"
+            app:layout_constraintStart_toStartOf="@id/signup_student_email_input"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/sign_up_password_text"
+                android:id="@+id/signup_student_password_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/title_password"
@@ -56,21 +85,112 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Подтвердить пароль -->
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_repassword_input"
-            android:layout_width="match_parent"
+            android:id="@+id/signup_student_repassword_input"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sign_up_password_input"
+            app:layout_constraintTop_toBottomOf="@id/signup_student_password_input"
+            app:layout_constraintStart_toStartOf="@id/signup_student_password_input"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/sign_up_repassword_text"
+                android:id="@+id/signup_student_repassword_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/tittle_confirm_password"
+                android:hint="@string/title_confirm_password"
                 android:maxLines="1"
                 android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
-</RelativeLayout>
+    <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/size_icon_login_in"
+            android:layout_height="@dimen/size_icon_login_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_student_name_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_student_name_input"
+            android:src="@drawable/ic_sharp_person_24"/>
+
+    <!-- Имя -->
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_student_name_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/signup_student_repassword_input"
+            app:layout_constraintStart_toStartOf="@id/signup_student_repassword_input"
+            app:layout_constraintEnd_toStartOf="@id/signup_student_surname_input"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_student_name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:maxLines="1"
+                        android:inputType="textCapWords"
+                        android:hint="@string/title_name"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Фамилия -->
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_student_surname_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/signup_student_name_input"
+            app:layout_constraintTop_toTopOf="@id/signup_student_name_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="15dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_student_surname_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:maxLines="1"
+                        android:inputType="textCapWords"
+                        android:hint="@string/title_surname"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/size_icon_login_in"
+            android:layout_height="@dimen/size_icon_login_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_student_phone_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_student_phone_input"
+            android:src="@drawable/ic_sharp_phone_24"/>
+
+    <!-- Номер телефона -->
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_student_phone_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/signup_student_name_input"
+            app:layout_constraintTop_toBottomOf="@id/signup_student_name_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_student_phone_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:maxLength="16"
+                android:inputType="phone"
+                android:hint="@string/title_phone"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Зарегестрироваться -->
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/signup_student_accept_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/signup_student_phone_input"
+            app:layout_constraintEnd_toEndOf="@id/signup_student_repassword_input"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            android:text="@string/bt_sign_up"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,5 +4,5 @@ import androidx.fragment.app.Fragment
 
 interface OnLoginInFragmentInteractionListener {
 
-    fun OnFragmentInteraction(fragment: KindaFragment)
+    fun OnFragmentInteraction(fragment: LoginInActivity.KindaFragment)
 }

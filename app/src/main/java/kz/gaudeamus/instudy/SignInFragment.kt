@@ -16,16 +16,16 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     var loginInFragmentListener: OnLoginInFragmentInteractionListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
 
         //Визуальные компоненты
-        val signUpButton: MaterialButton = view.findViewById(R.id.sign_in_register_button)
+        val signUpButton: MaterialButton = view.findViewById(R.id.signin_register_button)
 
         signUpButton.setOnClickListener { view ->
             val popup = PopupMenu(context, view)
             popup.menuInflater.inflate(R.menu.sign_up_type_menu, popup.menu)
 
+            //Обработчик нажатия на элемент меню
             popup.setOnMenuItemClickListener(this)
 
             popup.show()
@@ -38,11 +38,11 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         when(item?.itemId) {
             R.id.signup_student_menu -> {
                 //Переход на регистрацию студента
-                this.loginInFragmentListener?.OnFragmentInteraction(KindaFragment.SIGN_UP_STUDENT)
+                this.loginInFragmentListener?.OnFragmentInteraction(LoginInActivity.KindaFragment.SIGN_UP_STUDENT)
             }
             R.id.signup_school_menu -> {
                 //Переход на регистрацию школы
-                this.loginInFragmentListener?.OnFragmentInteraction(KindaFragment.SIGN_UP_SCHOOL)
+                this.loginInFragmentListener?.OnFragmentInteraction(LoginInActivity.KindaFragment.SIGN_UP_SCHOOL)
             }
         }
 

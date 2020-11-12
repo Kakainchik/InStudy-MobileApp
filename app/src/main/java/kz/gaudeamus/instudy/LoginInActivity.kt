@@ -28,7 +28,7 @@ class LoginInActivity : AppCompatActivity(), OnLoginInFragmentInteractionListene
         if(savedInstanceState == null) {
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.loginin_fragment_container, signInFragment)
-            transaction.commit() //Переходим на страницу авторизации
+            transaction.commit() //Переходим на фрагмент авторизации
         }
     }
 
@@ -38,20 +38,20 @@ class LoginInActivity : AppCompatActivity(), OnLoginInFragmentInteractionListene
                 val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.loginin_fragment_container, signUpStudentFragment)
                 transaction.addToBackStack(null)
-                transaction.commit() //Переходим на страницу регистрации студента
+                transaction.commit() //Переходим на фрагмент регистрации студента
             }
             KindaFragment.SIGN_UP_SCHOOL -> {
                 val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.loginin_fragment_container, signUpSchoolFragment)
                 transaction.addToBackStack(null)
-                transaction.commit() //Переходим на страницу регистрации школы
+                transaction.commit() //Переходим на фрагмент регистрации школы
             }
         }
     }
-}
 
-public enum class KindaFragment {
-    SIGN_IN,
-    SIGN_UP_STUDENT,
-    SIGN_UP_SCHOOL
+    public enum class KindaFragment {
+        SIGN_IN,
+        SIGN_UP_STUDENT,
+        SIGN_UP_SCHOOL
+    }
 }
