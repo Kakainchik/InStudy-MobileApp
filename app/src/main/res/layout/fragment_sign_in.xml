@@ -36,10 +36,11 @@
     
     <!-- Ввод пароля -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signin_password_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/signin_email_input">
+            android:id="@+id/signin_password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signin_email_input"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signin_password_text"

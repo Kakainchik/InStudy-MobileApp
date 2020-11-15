@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import java.lang.ClassCastException
 
 class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
@@ -20,15 +22,33 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
         //Визуальные компоненты
         val signUpButton: MaterialButton = view.findViewById(R.id.signin_register_button)
+        val signInButton: MaterialButton = view.findViewById(R.id.signin_login_button)
+        val emailText: TextInputEditText = view.findViewById(R.id.signin_email_text)
+        val emailLayout: TextInputLayout = view.findViewById(R.id.signin_email_input)
+        val passwordText: TextInputEditText = view.findViewById(R.id.signin_password_text)
+        val passwordLayout: TextInputLayout = view.findViewById(R.id.signin_password_input)
 
-        signUpButton.setOnClickListener { view ->
-            val popup = PopupMenu(context, view)
+        //Обработчик нажатия на кнопку регистрации
+        signUpButton.setOnClickListener {
+            val popup = PopupMenu(context, it)
             popup.menuInflater.inflate(R.menu.sign_up_type_menu, popup.menu)
 
             //Обработчик нажатия на элемент меню
             popup.setOnMenuItemClickListener(this)
 
             popup.show()
+        }
+
+        //Обработчик нажатия на кнопку входа
+        signInButton.setOnClickListener {
+
+            //Верный ли адрес
+            emailText.takeUnless {
+                android.util.Patterns.EMAIL_ADDRESS.matcher(it.text.toString()).matches()
+            }?.run { emailLayout.error = view.resources.getText(R.string.error_invalid_email) }
+                ?: run { emailLayout.error = null }
+
+
         }
 
         return view

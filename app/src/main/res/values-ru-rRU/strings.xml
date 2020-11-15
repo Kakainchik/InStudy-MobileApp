@@ -15,4 +15,8 @@
     <string name="title_name">Имя</string>
     <string name="title_surname">Фамилия</string>
     <string name="title_phone">Телефон</string>
+    <string name="title_organization">Наименование</string>
+    <string name="error_invalid_email">Неверный адрес.</string>
+    <string name="error_unmatched_password">Пароль должен содержать как минимум 1 заглавную букву, 1 цифру и быть более 7 знаков в длину.</string>
+    <string name="error_invalid_repassword">Пароли не совпадают.</string>
 </resources>

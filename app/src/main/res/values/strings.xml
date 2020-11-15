@@ -16,5 +16,9 @@
     <string name="title_name">Name</string>
     <string name="title_surname">Surname</string>
     <string name="title_phone">Phone</string>
+    <string name="title_organization">Organization</string>
+    <string name="error_invalid_email">Invalid email.</string>
+    <string name="error_unmatched_password">Password should contain at least 1 uppercase character, 1 digit and be more 7 in length.</string>
+    <string name="error_invalid_repassword">Passwords do not equal.</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

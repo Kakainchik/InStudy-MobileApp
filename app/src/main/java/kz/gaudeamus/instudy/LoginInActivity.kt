@@ -4,6 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 
+/**
+ * <p>  Current pattern: minimum 8 character,
+ *      should contain at least 1 digit, 1 uppercase </p>
+ * @return `true` if current password matches the matcher's pattern
+ */
+public fun isPasswordValid(password: String?): Boolean {
+    password?.let {
+        val passwordPattern = """^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{7,}$"""
+        val passwordMatcher = Regex(passwordPattern)
+
+        return passwordMatcher.find(it) != null
+    } ?: return false
+}
+
 class LoginInActivity : AppCompatActivity(), OnLoginInFragmentInteractionListener {
 
     private val signInFragment: SignInFragment

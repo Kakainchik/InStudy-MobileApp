@@ -45,7 +45,8 @@
             app:layout_constraintStart_toEndOf="@id/email_bitmap"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
-            android:layout_marginStart="15dp">
+            android:layout_marginStart="15dp"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_student_email_text"
@@ -73,7 +74,8 @@
             app:layout_constraintTop_toBottomOf="@id/signup_student_email_input"
             app:layout_constraintStart_toStartOf="@id/signup_student_email_input"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_student_password_text"
@@ -93,7 +95,8 @@
             app:layout_constraintTop_toBottomOf="@id/signup_student_password_input"
             app:layout_constraintStart_toStartOf="@id/signup_student_password_input"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_student_repassword_text"
@@ -170,7 +173,8 @@
             app:layout_constraintStart_toStartOf="@id/signup_student_name_input"
             app:layout_constraintTop_toBottomOf="@id/signup_student_name_input"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_student_phone_text"
@@ -185,7 +189,7 @@
 
     <!-- Зарегестрироваться -->
     <com.google.android.material.button.MaterialButton
-            android:id="@+id/signup_student_accept_button"
+            android:id="@+id/signup_student_register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/signup_student_phone_input"

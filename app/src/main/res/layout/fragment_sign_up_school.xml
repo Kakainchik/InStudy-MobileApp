@@ -26,13 +26,26 @@
             android:textSize="@dimen/title_text_smalldescription"
             android:text="@string/title_as_school"/>
 
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/email_bitmap"
+            android:layout_width="@dimen/size_icon_login_in"
+            android:layout_height="@dimen/size_icon_login_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_school_email_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_school_email_input"
+            android:src="@drawable/ic_sharp_email_24"/>
+
     <!-- E-mail -->
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_school_email_input"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/signup_school_desc"
-            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+            app:layout_constraintStart_toEndOf="@id/email_bitmap"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_school_email_text"
@@ -44,12 +57,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/size_icon_login_in"
+            android:layout_height="@dimen/size_icon_login_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_school_password_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_school_password_input"
+            android:src="@drawable/ic_sharp_lock_24"/>
+
     <!-- Пароль -->
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_school_password_input"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/signup_school_email_input"
+            app:layout_constraintStart_toStartOf="@id/signup_school_email_input"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -65,10 +88,13 @@
     <!-- Подтверждение -->
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_school_repassword_input"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/signup_school_password_input"
-            android:layout_marginTop="@dimen/vertical_margin_login_in_activity">
+            app:layout_constraintStart_toStartOf="@id/signup_school_password_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_school_repassword_text"
@@ -79,5 +105,45 @@
                 android:hint="@string/title_confirm_password"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/size_icon_login_in"
+            android:layout_height="@dimen/size_icon_login_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/signup_school_name_input"
+            app:layout_constraintBottom_toBottomOf="@id/signup_school_name_input"
+            android:src="@drawable/ic_sharp_person_24"/>
+
+    <!-- Название школы -->
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_school_name_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/signup_school_repassword_input"
+            app:layout_constraintTop_toBottomOf="@id/signup_school_repassword_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            app:errorEnabled="true"
+            app:counterEnabled="true"
+            app:counterMaxLength="100">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_school_name_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:inputType="text"
+                android:hint="@string/title_organization"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/signup_school_register_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/signup_school_name_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
+            android:text="@string/bt_sign_up"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
