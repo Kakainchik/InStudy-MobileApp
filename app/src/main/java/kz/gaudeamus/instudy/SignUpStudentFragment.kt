@@ -29,24 +29,58 @@ class SignUpStudentFragment : Fragment() {
         val repassLayout: TextInputLayout = view.findViewById(R.id.signup_student_repassword_input)
         val phoneText: TextInputEditText = view.findViewById(R.id.signup_student_phone_text)
         val phoneLayout: TextInputLayout = view.findViewById(R.id.signup_student_phone_input)
+        val nameText: TextInputEditText = view.findViewById(R.id.signup_student_name_text)
+        val nameLayout: TextInputLayout = view.findViewById(R.id.signup_student_name_input)
+        //TODO: Проверять фамилию или нет?
+        val surnameText: TextInputEditText = view.findViewById(R.id.signup_student_surname_text)
+        val surnameLayout: TextInputLayout = view.findViewById(R.id.signup_student_surname_input)
+
+        //Переменные
+        var isValid: Boolean = true
 
         //Обработчик нажатия на кнопку регистрации
         signUpButton.setOnClickListener {
             //Верный ли адрес
             emailText.takeUnless {
                 android.util.Patterns.EMAIL_ADDRESS.matcher(it.text.toString()).matches()
-            }?.run { emailLayout.error = view.resources.getString(R.string.error_invalid_email) }
-                ?: run { emailLayout.error = null }
+            }?.run {
+                emailLayout.error = view.resources.getString(R.string.error_invalid_email)
+                isValid = false
+            } ?:run { emailLayout.error = null }
 
             //Верный ли пароль
             passwordText.takeUnless { isPasswordValid(it.text.toString()) }
-                ?.run { passwordLayout.error = view.resources.getString(R.string.error_unmatched_password) }
-                ?: run { passwordLayout.error = null }
+                ?.run {
+                    passwordLayout.error = view.resources.getString(R.string.error_unmatched_password)
+                    isValid = false
+                } ?:run { passwordLayout.error = null }
 
             //Верен ли повторный пароль
             repassText.takeUnless { it.text.toString().equals(passwordText.text.toString()) }
-                ?.run { repassLayout.error = view.resources.getString(R.string.error_invalid_repassword) }
-                ?: run { repassLayout.error = null }
+                ?.run {
+                    repassLayout.error = view.resources.getString(R.string.error_invalid_repassword)
+                    isValid = false
+                } ?:run { repassLayout.error = null }
+
+            //Не пустое ли имя
+            nameText.takeIf { it.text.isNullOrEmpty() }
+                ?.run {
+                    nameLayout.error = view.resources.getString(R.string.error_empty_text)
+                    isValid = false
+                } ?:run { nameLayout.error = null }
+
+            //Не пустой ли номер
+            phoneText.takeIf { it.text.isNullOrEmpty() }
+                ?.run {
+                    phoneLayout.error = view.resources.getString(R.string.error_empty_text)
+                    isValid = false
+                } ?:run { phoneLayout.error = null }
+
+            if(isValid) {
+                //TODO("Registration")
+            }
+
+            isValid = true
         }
 
         return view

@@ -40,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/signin_email_input"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signin_password_text"

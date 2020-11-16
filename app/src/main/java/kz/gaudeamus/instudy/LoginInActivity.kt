@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 
 /**
- * <p>  Current pattern: minimum 8 character,
- *      should contain at least 1 digit, 1 uppercase </p>
+ * <p>  Current pattern: minimum 7 character,
+ *      should contain at least 1 digit, 1 uppercase, 1 lowercase </p>
  * @return `true` if current password matches the matcher's pattern
  */
 public fun isPasswordValid(password: String?): Boolean {

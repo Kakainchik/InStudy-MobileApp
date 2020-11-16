@@ -20,5 +20,7 @@
     <string name="error_invalid_email">Invalid email.</string>
     <string name="error_unmatched_password">Password should contain at least 1 uppercase character, 1 digit and be more 7 in length.</string>
     <string name="error_invalid_repassword">Passwords do not equal.</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="error_counter_limit">Inadmissible length!</string>
+    <string name="error_counter_minimum">Minimum 3 letters!</string>
+    <string name="error_empty_text">Cannot be empty.</string>
 </resources>
