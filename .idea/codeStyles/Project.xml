@@ -18,6 +18,7 @@
         </value>
       </option>
       <option name="SPACE_BEFORE_WHEN_PARENTHESES" value="false" />
+      <option name="ALLOW_TRAILING_COMMA" value="true" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <XML>
@@ -26,10 +27,20 @@
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
       <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
       <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
+      <option name="CALL_PARAMETERS_WRAP" value="0" />
+      <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="false" />
+      <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="false" />
+      <option name="METHOD_PARAMETERS_WRAP" value="0" />
+      <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="false" />
+      <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="false" />
+      <indentOptions>
+        <option name="USE_TAB_CHARACTER" value="true" />
+      </indentOptions>
     </codeStyleSettings>
   </code_scheme>
 </component>

@@ -10,6 +10,7 @@
         <item name="android:contextPopupMenuStyle">@style/Widget.MaterialComponents.PopupMenu.ContextMenu</item>
         <item name="actionOverflowMenuStyle">@style/Widget.MaterialComponents.PopupMenu.Overflow</item>
         <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
     </style>
 
     <style name="AppTheme.Launcher">
@@ -27,6 +28,12 @@
 
     <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="boxBackgroundColor">@color/colorTextBoxBackground</item>
+    </style>
+
+    <style name="Widget.App.Chip.File" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="closeIcon">@drawable/ic_sharp_close_24</item>
+        <item name="closeIconEnabled">true</item>
+        <item name="closeIconVisible">true</item>
     </style>
 
 </resources>

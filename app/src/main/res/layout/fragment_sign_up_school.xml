@@ -140,13 +140,55 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Кнопка: добавить файл -->
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/signup_school_addfile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signup_school_name_input"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Icon"
+            app:icon="@drawable/ic_sharp_add_24"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            android:text="@string/bt_add_file"/>
+
+    <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/signup_school_name_input"
+            app:layout_constraintStart_toEndOf="@id/signup_school_addfile_button"
+            app:layout_constraintBottom_toBottomOf="@id/signup_school_addfile_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+                android:id="@+id/signup_school_chipgroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:singleLine="true"
+                app:chipSpacingHorizontal="10dp"
+                app:selectionRequired="false"/>
+
+    </HorizontalScrollView>
+
+    <!-- Кнопка: зарегестрироваться -->
     <com.google.android.material.button.MaterialButton
             android:id="@+id/signup_school_register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/signup_school_name_input"
+            app:layout_constraintTop_toBottomOf="@id/signup_school_addfile_button"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/vertical_margin_login_in_activity"
             android:text="@string/bt_sign_up"/>
+
+    <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/signup_school_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif"
+            android:textSize="@dimen/title_text_smalldescription"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

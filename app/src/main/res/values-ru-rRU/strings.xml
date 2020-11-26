@@ -22,4 +22,16 @@
     <string name="error_counter_limit">Недопустимая длина!</string>
     <string name="error_counter_minimum">Минимум 3 символа!</string>
     <string name="error_empty_text">Не может быть пустым.</string>
+    <string name="menu_card">Карточки</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_chat">Чаты</string>
+    <string name="menu_query">Запросы</string>
+    <string name="notice_no_query">У вас нет никаких запросов.</string>
+    <string name="notice_no_card">У вас нет никаких карточек.</string>
+    <string name="notice_school_registration_assert">
+        <![CDATA[
+        <B>Внимание:</B> Регистрация вас как учебного учреждения не подтверждается мгновенно. Вы обязаны предоставить как минимум 1 документ, подтверждающий ваше юридическое право на осуществление образовательной деятельности.
+        ]]>
+    </string>
+    <string name="bt_add_file">Добавить файл</string>
 </resources>

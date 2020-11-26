@@ -41,13 +41,11 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
         //Обработчик нажатия на кнопку входа
         signInButton.setOnClickListener {
-
             //Верный ли адрес
             emailText.takeUnless {
                 android.util.Patterns.EMAIL_ADDRESS.matcher(it.text.toString()).matches()
             }?.run { emailLayout.error = view.resources.getText(R.string.error_invalid_email) }
                 ?: run { emailLayout.error = null }
-
 
         }
 

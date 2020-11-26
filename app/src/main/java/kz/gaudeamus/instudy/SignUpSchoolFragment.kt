@@ -1,25 +1,35 @@
 package kz.gaudeamus.instudy
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textview.MaterialTextView
+import java.io.File
 
 class SignUpSchoolFragment : Fragment() {
+
+    private val CHOOISE_FILE_REQUESTCODE: Int = 100
+    private val requiredFiles: HashMap<String, File> = HashMap()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_sign_up_school, container, false)
 
         //Визуальные компоненты
         val signUpButton: MaterialButton = view.findViewById(R.id.signup_school_register_button)
+        val addFileButton: MaterialButton = view.findViewById(R.id.signup_school_addfile_button)
         val emailText: TextInputEditText = view.findViewById(R.id.signup_school_email_text)
         val emailLayout: TextInputLayout = view.findViewById(R.id.signup_school_email_input)
         val passwordText: TextInputEditText = view.findViewById(R.id.signup_school_password_text)
@@ -28,11 +38,12 @@ class SignUpSchoolFragment : Fragment() {
         val repassLayout: TextInputLayout = view.findViewById(R.id.signup_school_repassword_input)
         val organizationText: TextInputEditText = view.findViewById(R.id.signup_school_name_text)
         val organizationLayout: TextInputLayout = view.findViewById(R.id.signup_school_name_input)
+        val noticeText: MaterialTextView = view.findViewById(R.id.signup_school_notice)
 
         //Переменные
         var isValid: Boolean = true
 
-        //Обработчик нажатия на кнопку регистрации
+        //Нажимаем на кнопку регистрации
         signUpButton.setOnClickListener {
             //Верный ли адрес
             emailText.takeUnless {
@@ -63,11 +74,36 @@ class SignUpSchoolFragment : Fragment() {
                     isValid = false
                 }
 
+            //Прикреплён ли хоть один документ
+            requiredFiles.takeIf { it.isEmpty() }
+                ?.run {
+                    addFileButton.apply {
+                        setTextColor(resources.getColor(R.color.colorAccent))
+                        setIconTintResource(R.color.colorAccent)
+                    }
+                    isValid = false
+                } ?:run {
+                    addFileButton.apply {
+                        setTextColor(resources.getColor(R.color.colorPrimary))
+                        setIconTintResource(R.color.colorPrimary)
+                    }
+            }
+
             if(isValid) {
                 //TODO("Registration")
             }
 
             isValid = true
+        }
+
+        //Нажимаем на кнопку добавления файла
+        addFileButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                setType("application/*")
+                addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+            }
+            startActivityForResult(intent, CHOOISE_FILE_REQUESTCODE)
         }
 
         //Выводим ошибку если сверхлимит длины
@@ -81,8 +117,7 @@ class SignUpSchoolFragment : Fragment() {
                     ?.run {
                         this.error = view.resources.getString(R.string.error_counter_limit)
                         isValid = false
-                    }
-                    ?: run { organizationLayout.error = null }
+                    } ?:run { organizationLayout.error = null }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -91,7 +126,52 @@ class SignUpSchoolFragment : Fragment() {
             }
         })
 
+        //Устанавливаем предупреждение с html разметкой.
+        noticeText.setText(Html.fromHtml(view.resources.getString(R.string.notice_school_registration_assert)))
+
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode) {
+            CHOOISE_FILE_REQUESTCODE -> { //Выбор файла
+                if(resultCode == RESULT_OK) this.importFile(data?.data)
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    //Добавляем chip с выбранным файлом
+    private fun importFile(uri: Uri?) {
+        val file = File(uri?.path)
+        val addFileButton: MaterialButton? = view?.findViewById(R.id.signup_school_addfile_button)
+        val chipGroup: ChipGroup? = view?.findViewById(R.id.signup_school_chipgroup)
+        val chip = (layoutInflater.inflate(R.layout.single_chip_layout,
+                                          chipGroup,
+                                          false) as Chip).apply {
+            setText(file.name)
+            //Нажимаем на кнопку закрытия чипа
+            setOnCloseIconClickListener {
+                //Удаляем файл
+                this@SignUpSchoolFragment.requiredFiles.remove(file.name)
+                chipGroup?.removeView(it)
+                //Если список опустел - возвращаем текст на кнопку
+                if(this@SignUpSchoolFragment.requiredFiles.isEmpty())
+                    addFileButton?.text = resources.getString(R.string.bt_add_file)
+            }
+        }
+
+        //Если такого файла нет - добавляем, иначе - выводим ошибку
+        chipGroup.takeUnless { this.requiredFiles.containsKey(file.name) }
+            ?.run {
+                //Добавляем в общий список
+                this@SignUpSchoolFragment.requiredFiles.put(file.name, file)
+                this.addView(chip)
+                //Убираем текст с кнопки, дабы не загораживал
+                addFileButton?.text = null
+            } ?:run {
+                //TODO(Toast)
+            }
     }
 
     /**
