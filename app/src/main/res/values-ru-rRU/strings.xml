@@ -34,4 +34,7 @@
         ]]>
     </string>
     <string name="bt_add_file">Добавить файл</string>
+    <string name="error_same_file_exists">Такой файл уже есть.</string>
+    <string name="menu_add_card">Создать карточку</string>
+    <string name="menu_delete_card">Удалить</string>
 </resources>

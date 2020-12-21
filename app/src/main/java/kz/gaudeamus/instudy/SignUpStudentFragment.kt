@@ -71,8 +71,9 @@ class SignUpStudentFragment : Fragment() {
                     isValid = false
                 } ?:run { phoneLayout.error = null }
 
+            //Все условия соблюдены - отправляем запрос
             if(isValid) {
-                //TODO("Registration")
+
             }
 
             isValid = true

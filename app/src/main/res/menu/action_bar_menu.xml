@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/actionbar_delete_card"
+            android:enabled="true"
+            android:visible="true"
+            android:title="@string/menu_delete_card"
+            android:icon="@drawable/ic_sharp_delete_24"
+            app:showAsAction="ifRoom"/>
+</menu>

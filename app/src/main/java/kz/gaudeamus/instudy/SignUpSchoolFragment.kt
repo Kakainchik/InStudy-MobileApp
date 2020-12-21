@@ -7,22 +7,30 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
+import kz.gaudeamus.instudy.entities.RegistrationSchool
+import kz.gaudeamus.instudy.models.RegistrationSchoolViewModel
+import kz.gaudeamus.instudy.models.Status
 import java.io.File
+import java.io.FileInputStream
 
 class SignUpSchoolFragment : Fragment() {
 
-    private val CHOOISE_FILE_REQUESTCODE: Int = 100
-    private val requiredFiles: HashMap<String, File> = HashMap()
+    private val CHOOSE_FILE_REQUESTCODE: Int = 100
+    private val requiredFiles: HashMap<String, Uri> = HashMap()
+    private val model: RegistrationSchoolViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_sign_up_school, container, false)
@@ -89,8 +97,24 @@ class SignUpSchoolFragment : Fragment() {
                     }
             }
 
+            //Поля заполнены верно - запускаем процесс регистрации
             if(isValid) {
-                //TODO("Registration")
+                //Заполняем массив реквезитами и кодируем в Base64
+                var props = arrayOf<String>()
+                requiredFiles.forEach { key, value ->
+                    (context?.contentResolver?.openInputStream(value) as? FileInputStream).use {
+                        props.plusElement(Base64.encodeToString(it?.readBytes(), Base64.NO_WRAP))
+                    }
+                }
+
+                val data = RegistrationSchool(email = emailText.text.toString(),
+                                              password = passwordText.text.toString(),
+                                              organization = organizationText.text.toString(),
+                                              props = props)
+                model.registrate(data)
+                /*while(model.registrationLiveData.value?.status == Status.PROCESING) {
+
+                }*/
             }
 
             isValid = true
@@ -103,7 +127,7 @@ class SignUpSchoolFragment : Fragment() {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CHOOISE_FILE_REQUESTCODE)
+            startActivityForResult(intent, CHOOSE_FILE_REQUESTCODE)
         }
 
         //Выводим ошибку если сверхлимит длины
@@ -134,16 +158,16 @@ class SignUpSchoolFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
-            CHOOISE_FILE_REQUESTCODE -> { //Выбор файла
-                if(resultCode == RESULT_OK) this.importFile(data?.data)
+            CHOOSE_FILE_REQUESTCODE -> { //Выбор файла
+                if(resultCode == RESULT_OK) data?.data?.let { this.importFile(it) }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     //Добавляем chip с выбранным файлом
-    private fun importFile(uri: Uri?) {
-        val file = File(uri?.path)
+    private fun importFile(uri: Uri) {
+        val file = File(uri.path)
         val addFileButton: MaterialButton? = view?.findViewById(R.id.signup_school_addfile_button)
         val chipGroup: ChipGroup? = view?.findViewById(R.id.signup_school_chipgroup)
         val chip = (layoutInflater.inflate(R.layout.single_chip_layout,
@@ -162,15 +186,17 @@ class SignUpSchoolFragment : Fragment() {
         }
 
         //Если такого файла нет - добавляем, иначе - выводим ошибку
-        chipGroup.takeUnless { this.requiredFiles.containsKey(file.name) }
+        chipGroup.takeUnless { this.requiredFiles.containsKey(file.name)}
             ?.run {
                 //Добавляем в общий список
-                this@SignUpSchoolFragment.requiredFiles.put(file.name, file)
+                this@SignUpSchoolFragment.requiredFiles.put(file.name, uri)
                 this.addView(chip)
                 //Убираем текст с кнопки, дабы не загораживал
                 addFileButton?.text = null
             } ?:run {
-                //TODO(Toast)
+                Toast.makeText(this@SignUpSchoolFragment.context,
+                               R.string.error_same_file_exists,
+                               Toast.LENGTH_LONG).show()
             }
     }
 

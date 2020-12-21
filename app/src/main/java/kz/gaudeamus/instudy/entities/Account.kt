@@ -1,12 +1,12 @@
-package kz.gaudeamus.instudy
+package kz.gaudeamus.instudy.entities
 
 import kotlinx.serialization.Serializable
 
 /**
  *  {
  *      "email": "example@mail.com",
- *      "token": "123abc456",
- *      "kind": "MODERATOR"
+ *      "token": "Afhtg235h1az",
+ *      "kind": "31"
  *  }
  */
 @Serializable

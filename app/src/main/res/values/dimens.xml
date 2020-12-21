@@ -6,6 +6,7 @@
 
     <!-- Отступы -->
     <dimen name="vertical_margin_login_in_activity">15dp</dimen>
+    <dimen name="vertical_padding_card">12dp</dimen>
 
     <!-- Размеры -->
     <dimen name="size_icon_login_in">25dp</dimen>

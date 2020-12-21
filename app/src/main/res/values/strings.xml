@@ -35,4 +35,7 @@
         ]]>
     </string>
     <string name="bt_add_file">Add a file</string>
+    <string name="error_same_file_exists">Such a file is already attached.</string>
+    <string name="menu_add_card">Add card</string>
+    <string name="menu_delete_card">Delete</string>
 </resources>
