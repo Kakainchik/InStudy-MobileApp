@@ -10,19 +10,14 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.AccountKind
-import java.io.File
-import java.lang.Exception
-import java.nio.charset.Charset
-import java.nio.file.Files
 
-internal const val ACCOUNT_FILE_NAME = "USER_DATA.json"
+internal const val REQUEST_AUTHORIZATION: Int = 200
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
     Toolbar.OnMenuItemClickListener {
+
 
     private var currentUser: Account? = null
 
@@ -58,12 +53,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setContentView(R.layout.activity_main)
 
         //Проверяем наличие аккаунта, если нет - переходим на авторизацию
-        //currentUser = Account("", "", AccountKind.STUDENT)
-        if(!hasAnyAccount()) {
-            startActivity(Intent(this, LoginInActivity::class.java))
+        currentUser = IOFileHelper.anyAccountOrNull(this)
+        if(currentUser == null) {
+            startActivityForResult(Intent(this, LoginInActivity::class.java), REQUEST_AUTHORIZATION)
         }
         //Обновляем интерфейс под роль пользователя
-        updateUI()
+        else updateUI()
 
         //Визуальные компоненты
         val navigationMenu: BottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -78,7 +73,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         //startSupportActionMode(callback) //TODO Вызывает дополнительное меню - долго жмём на карточку
     }
 
-    //Обработчик нажатия на нижнее меню
+    /**
+     * Обработчик нажатия на нижнее меню.
+     */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val menuItem: Menu = findViewById<MaterialToolbar>(R.id.main_appbar).menu
 
@@ -101,7 +98,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    //Нажатие на верхне меню
+    /**
+     * Обработчик нажатия на верхнее меню.
+     */
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when(item?.itemId) {
             R.id.appbar_add_card -> { //Создаём новую карточку
@@ -112,7 +111,20 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    //Обновляем пользовательский интерфейс
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //Ответы от авторизации пока что только
+        when(resultCode) {
+            RESULT_OK -> {
+                currentUser = IOFileHelper.anyAccountOrNull(this)
+                updateUI()
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    /**
+     * Обновляет пользовательский интерфейс.
+     */
     private fun updateUI() {
         val navigationMenu: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
@@ -133,30 +145,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             AccountKind.STUDENT -> {
                 navigationMenu.menu.findItem(R.id.main_query_menu).isVisible = false
             }
-        }
-    }
-
-    private fun hasAnyAccount(): Boolean {
-
-        val file = File(this.dataDir, ACCOUNT_FILE_NAME)
-
-        //Если нет файла - сразу создаём и возвращаем false
-        return if(!file.exists()) {
-            file.createNewFile()
-            false
-        }
-        //Если есть, но делаем проверку на целостность
-        else {
-            currentUser = try {
-                val fin = openFileInput(ACCOUNT_FILE_NAME)
-                val json = fin.use {
-                    it.readBytes().toString(Charset.defaultCharset())
-                }
-                Json.decodeFromString<Account>(json)
-            } catch(ex: Exception) {
-                return false
-            }
-            true
         }
     }
 }

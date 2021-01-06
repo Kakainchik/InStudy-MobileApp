@@ -1,15 +1,28 @@
 package kz.gaudeamus.instudy
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kz.gaudeamus.instudy.entities.AccountKind
+import kz.gaudeamus.instudy.entities.RegistrationStudentRequest
+import kz.gaudeamus.instudy.models.RegistrationStudentViewModel
+import kz.gaudeamus.instudy.models.Status
+import java.lang.ClassCastException
 
 class SignUpStudentFragment : Fragment() {
+
+    private val model: RegistrationStudentViewModel by activityViewModels()
+    private var loginInFragmentListener: OnLoginInFragmentListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_sign_up_student, container, false)
@@ -73,12 +86,53 @@ class SignUpStudentFragment : Fragment() {
 
             //Все условия соблюдены - отправляем запрос
             if(isValid) {
+                val data = RegistrationStudentRequest(email = emailText.text.toString(),
+                                                      password = passwordText.text.toString(),
+                                                      phone = phoneText.text.toString(),
+                                                      name = nameText.text.toString(),
+                                                      surname = surnameText.text.toString())
 
+                //Наблюдаем за изменениями процесса работы
+                model.signinLiveData.observe(this.viewLifecycleOwner, { storeData ->
+                    val resource = storeData?.data
+
+                    when(storeData.status) {
+                        Status.PROCESING -> {
+                            //Операция в процессе, блокируем интерфейс
+                            this.loginInFragmentListener?.onBlockUI(false)
+                        }
+                        Status.COMPLETED -> {
+                            //Операция завершена, разблокируем интерфейс
+                            this.loginInFragmentListener?.onBlockUI(true)
+                            Toast.makeText(context, resource?.message, Toast.LENGTH_SHORT).show()
+
+                            //TODO: Переходим на фрагмент назад и показываем оповещение об подтверждении почты
+                            this.loginInFragmentListener?.onFragmentInteraction(LoginInActivity.KindaFragment.SIGN_IN)
+                            this.loginInFragmentListener?.onRegistered(AccountKind.STUDENT)
+                        }
+                        Status.CANCELED -> {
+                            //Операция отменена, разблокируем интерфейс и выводим сообщение
+                            this.loginInFragmentListener?.onBlockUI(true)
+                            Toast.makeText(context, storeData.error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+                model.registrate(data)
             }
 
             isValid = true
         }
 
         return view
+    }
+
+    //Прикрепляем интерфейс слушатель
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            this.loginInFragmentListener = context as OnLoginInFragmentListener
+        } catch(ex: ClassCastException) {
+            ex.printStackTrace()
+        }
     }
 }

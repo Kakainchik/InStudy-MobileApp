@@ -5,21 +5,23 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.ktor.client.features.*
 import io.ktor.network.sockets.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kz.gaudeamus.instudy.R
 import kz.gaudeamus.instudy.SingleLiveEvent
 import kz.gaudeamus.instudy.entities.RegistrationResponse
-import kz.gaudeamus.instudy.entities.RegistrationSchoolRequest
+import kz.gaudeamus.instudy.entities.RegistrationStudentRequest
 import java.lang.Exception
 
-class RegistrationSchoolViewModel(application: Application) : AndroidViewModel(application) {
+class RegistrationStudentViewModel(application: Application) : AndroidViewModel(application) {
 	public val signinLiveData = SingleLiveEvent<Resource<RegistrationResponse>>()
 	private val regRepository = AuthorizationRepository()
 
 	/**
-	 * Регестрирует школу.
+	 * Регестрирует студента.
 	 */
-	public fun registrate(school: RegistrationSchoolRequest) {
+	fun registrate(student: RegistrationStudentRequest) {
 		//Устанавливаем метку как "идущий процесс"
 		signinLiveData.value = Resource(Status.PROCESING, null, null)
 
@@ -28,7 +30,7 @@ class RegistrationSchoolViewModel(application: Application) : AndroidViewModel(a
 
 			//Получаем результат
 			val result: Resource<RegistrationResponse> = try {
-				regRepository.makeRegistrationRequest(school)
+				regRepository.makeRegistrationRequest(student)
 			} catch(ex: ConnectTimeoutException) {
 				val error: String = getApplication<Application>().getString(R.string.error_http_timeout)
 				Resource(Status.CANCELED, null, error)

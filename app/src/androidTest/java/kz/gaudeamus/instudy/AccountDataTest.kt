@@ -1,16 +1,15 @@
 package kz.gaudeamus.instudy
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kz.gaudeamus.instudy.entities.Account
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.File
 import java.nio.charset.Charset
 
 @RunWith(AndroidJUnit4::class)

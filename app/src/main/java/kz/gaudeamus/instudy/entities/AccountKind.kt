@@ -8,5 +8,9 @@ package kz.gaudeamus.instudy.entities
 enum class AccountKind(val value: Int) {
     STUDENT(31),
     SCHOOL(50),
-    MODERATOR(42)
+    MODERATOR(42);
+
+    companion object {
+        fun from(findValue: Int): AccountKind = values().first { it.value == findValue }
+    }
 }

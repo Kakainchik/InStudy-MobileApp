@@ -1,6 +1,7 @@
 package kz.gaudeamus.instudy
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,7 +12,9 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
@@ -20,17 +23,20 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
-import kz.gaudeamus.instudy.entities.RegistrationSchool
+import kz.gaudeamus.instudy.entities.AccountKind
+import kz.gaudeamus.instudy.entities.RegistrationSchoolRequest
 import kz.gaudeamus.instudy.models.RegistrationSchoolViewModel
 import kz.gaudeamus.instudy.models.Status
 import java.io.File
 import java.io.FileInputStream
+import java.lang.ClassCastException
 
 class SignUpSchoolFragment : Fragment() {
 
     private val CHOOSE_FILE_REQUESTCODE: Int = 100
     private val requiredFiles: HashMap<String, Uri> = HashMap()
     private val model: RegistrationSchoolViewModel by activityViewModels()
+    private var loginInFragmentListener: OnLoginInFragmentListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_sign_up_school, container, false)
@@ -100,21 +106,46 @@ class SignUpSchoolFragment : Fragment() {
             //Поля заполнены верно - запускаем процесс регистрации
             if(isValid) {
                 //Заполняем массив реквезитами и кодируем в Base64
-                var props = arrayOf<String>()
+                val props = mutableListOf<String>()
                 requiredFiles.forEach { key, value ->
                     (context?.contentResolver?.openInputStream(value) as? FileInputStream).use {
-                        props.plusElement(Base64.encodeToString(it?.readBytes(), Base64.NO_WRAP))
+                        val bytes: ByteArray = ByteArray(it!!.available())
+                        it.read(bytes)
+                        props.add(Base64.encodeToString(bytes, Base64.NO_WRAP))
                     }
                 }
 
-                val data = RegistrationSchool(email = emailText.text.toString(),
-                                              password = passwordText.text.toString(),
-                                              organization = organizationText.text.toString(),
-                                              props = props)
-                model.registrate(data)
-                /*while(model.registrationLiveData.value?.status == Status.PROCESING) {
+                val data = RegistrationSchoolRequest(email = emailText.text.toString(),
+                                                     password = passwordText.text.toString(),
+                                                     organization = organizationText.text.toString(),
+                                                     props = props.toTypedArray())
 
-                }*/
+                //Наблюдаем за изменениями процесса работы
+                model.signinLiveData.observe(this.viewLifecycleOwner, { storeData ->
+                    val resource = storeData?.data
+
+                    when(storeData.status) {
+                        Status.PROCESING -> {
+                            //Операция в процессе, блокируем интерфейс
+                            this.loginInFragmentListener?.onBlockUI(false)
+                        }
+                        Status.COMPLETED -> {
+                            //Операция завершена, разблокируем интерфейс
+                            this.loginInFragmentListener?.onBlockUI(true)
+                            Toast.makeText(context, resource?.message, Toast.LENGTH_SHORT).show()
+
+                            //TODO: Переходим на фрагмент назад и показываем оповещение об ожидании подтверждения
+                            this.loginInFragmentListener?.onFragmentInteraction(LoginInActivity.KindaFragment.SIGN_IN)
+                            this.loginInFragmentListener?.onRegistered(AccountKind.SCHOOL)
+                        }
+                        Status.CANCELED -> {
+                            //Операция отменена, разблокируем интерфейс и выводим сообщение
+                            this.loginInFragmentListener?.onBlockUI(true)
+                            Toast.makeText(context, storeData.error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+                model.registrate(data)
             }
 
             isValid = true
@@ -198,6 +229,16 @@ class SignUpSchoolFragment : Fragment() {
                                R.string.error_same_file_exists,
                                Toast.LENGTH_LONG).show()
             }
+    }
+
+    //Прикрепляем интерфейс слушатель
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            this.loginInFragmentListener = context as OnLoginInFragmentListener
+        } catch(ex: ClassCastException) {
+            ex.printStackTrace()
+        }
     }
 
     /**

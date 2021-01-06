@@ -37,4 +37,7 @@
     <string name="error_same_file_exists">Такой файл уже есть.</string>
     <string name="menu_add_card">Создать карточку</string>
     <string name="menu_delete_card">Удалить</string>
+    <string name="error_http_timeout">Время ожидания от сервера истекло. Попробуйте ещё раз.</string>
+    <string name="error_http_connect">Не удаётся подключиться к серверу.</string>
+    <string name="error_unexpected">Непредвиденная ошибка. Попробуйте снова.</string>
 </resources>

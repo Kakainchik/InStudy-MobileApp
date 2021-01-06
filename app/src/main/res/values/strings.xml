@@ -38,4 +38,7 @@
     <string name="error_same_file_exists">Such a file is already attached.</string>
     <string name="menu_add_card">Add card</string>
     <string name="menu_delete_card">Delete</string>
+    <string name="error_http_timeout">Response timed out. Try again.</string>
+    <string name="error_http_connect">Unable to connect to server.</string>
+    <string name="error_unexpected">Unexpected error. Try again.</string>
 </resources>
