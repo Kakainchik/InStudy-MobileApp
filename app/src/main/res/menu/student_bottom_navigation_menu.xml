@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/main_card_menu"
+            android:title="@string/menu_card"
+            android:enabled="true"
+            android:icon="@drawable/ic_sharp_local_offer_24"/>
+
+    <item android:id="@+id/main_chat_menu"
+            android:title="@string/menu_chat"
+            android:enabled="true"
+            android:icon="@drawable/ic_sharp_chat_24"/>
+
+    <item android:id="@+id/main_settings_menu"
+            android:title="@string/menu_settings"
+            android:enabled="true"
+            android:icon="@drawable/ic_sharp_settings_24"/>
+</menu>

@@ -10,11 +10,6 @@
             android:enabled="true"
             android:icon="@drawable/ic_sharp_chat_24"/>
 
-    <item android:id="@+id/main_query_menu"
-            android:title="@string/menu_query"
-            android:enabled="true"
-            android:icon="@drawable/ic_sharp_local_offer_24"/>
-
     <item android:id="@+id/main_settings_menu"
             android:title="@string/menu_settings"
             android:enabled="true"

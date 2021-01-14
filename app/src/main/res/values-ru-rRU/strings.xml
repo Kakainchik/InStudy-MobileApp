@@ -40,4 +40,9 @@
     <string name="error_http_timeout">Время ожидания от сервера истекло. Попробуйте ещё раз.</string>
     <string name="error_http_connect">Не удаётся подключиться к серверу.</string>
     <string name="error_unexpected">Непредвиденная ошибка. Попробуйте снова.</string>
+    <string name="status_card_draft">Черновик</string>
+    <string name="status_card_active">Активен</string>
+    <string name="status_card_expired">Устарел</string>
+    <string name="bt_create_card">Создать</string>
+    <string name="bt_save2draft_card">В черновик</string>
 </resources>

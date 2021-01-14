@@ -24,16 +24,21 @@
                 android:paddingVertical="@dimen/vertical_padding_card">
 
             <EditText
+                    android:id="@+id/create_card_title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="What do you look for?"
                     android:maxLines="1"/>
 
+            <View style="@style/Divider"/>
+
             <EditText
+                    android:id="@+id/create_card_content_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
-                    android:hint="Any comment"/>
+                    android:hint="Any comment"
+                    android:gravity="clip_vertical"/>
 
         </LinearLayout>
 
@@ -56,12 +61,29 @@
                 android:paddingVertical="@dimen/vertical_padding_card">
 
             <Spinner
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/create_card_create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/create_card_contact"
+            android:layout_marginTop="@dimen/vertical_margin_card"
+            android:text="@string/bt_create_card"/>
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/create_card_save2draft_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/create_card_create_button"
+            android:text="@string/bt_save2draft_card"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00A65A</color>
+    <color name="colorPrimary">#00A85A</color>
     <color name="colorPrimaryDark">#00C36A</color>
-    <color name="colorAccent">#D50000</color>
-    <color name="colorBackground">#f3f3f3</color>
+    <color name="colorAccent">#3E65AD</color>
+    <color name="colorBackground">#F3F3F3</color>
 
     <color name="colorTextBoxBackground">#ECECEC</color>
     <color name="colorContextualAppbarBackground">#4E4E4E</color>

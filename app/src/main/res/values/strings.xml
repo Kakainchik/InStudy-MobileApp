@@ -41,4 +41,10 @@
     <string name="error_http_timeout">Response timed out. Try again.</string>
     <string name="error_http_connect">Unable to connect to server.</string>
     <string name="error_unexpected">Unexpected error. Try again.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="status_card_draft">Draft</string>
+    <string name="status_card_active">Active</string>
+    <string name="status_card_expired">Expired</string>
+    <string name="bt_create_card">Create</string>
+    <string name="bt_save2draft_card">Save as draft</string>
 </resources>

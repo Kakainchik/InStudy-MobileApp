@@ -63,7 +63,7 @@
         android:gravity="end"
         android:layout_below="@id/signin_password_input">
 
-        <!-- Регистрации. Показывает два типа: студент, учитель -->
+        <!-- Регистрация. Показывает два типа: студент, учитель -->
         <com.google.android.material.button.MaterialButton
                 android:id="@+id/signin_register_button"
                 android:layout_width="wrap_content"

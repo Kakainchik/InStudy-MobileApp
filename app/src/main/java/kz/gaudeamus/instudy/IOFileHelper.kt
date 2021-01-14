@@ -1,10 +1,13 @@
 package kz.gaudeamus.instudy
 
 import android.content.Context
+import android.util.Log
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.*
 import kz.gaudeamus.instudy.entities.Account
+import kz.gaudeamus.instudy.entities.Card
 import java.io.File
 import java.lang.Exception
 import java.nio.charset.Charset
@@ -12,6 +15,7 @@ import java.nio.charset.Charset
 object IOFileHelper {
 
 	internal const val ACCOUNT_FILE_NAME = "USER_DATA.json"
+	internal const val CARDS_FILE_NAME = "CARDS_DATA.json"
 
 	/**
 	 *	Возвращает текущий активный аккаунт в приложении либо null, если такового не имеется.
@@ -54,6 +58,41 @@ object IOFileHelper {
 			true
 		} catch(ex: Exception) {
 			false
+		}
+	}
+
+	/**
+	 * Добавляет новую карточку в список всех других карт студента.
+	 */
+	public fun appendCard2Student(context: Context, card: Card) : Boolean {
+		val file = File(context.dataDir, CARDS_FILE_NAME)
+
+		try {
+			if(!file.exists()) {
+				file.createNewFile()
+				Log.i("APPEND CARD", "Creating new empty file")
+
+				context.openFileOutput(file.name, Context.MODE_PRIVATE).use {
+					it.write("""[]""".toByteArray())
+				}
+			}
+
+			var cards: Array<Card> = arrayOf()
+			val json = context.openFileInput(file.name).use {
+				val bytes = it.readBytes()
+				bytes.toString(Charset.defaultCharset())
+			}
+
+			cards = Json.decodeFromString(json)
+			cards = cards.plus(card)
+
+			context.openFileOutput(file.name, Context.MODE_PRIVATE).use {
+				it.write(Json.encodeToString(cards).toByteArray())
+			}
+			return true
+		} catch(ex: Exception) {
+			ex.message?.let { Log.e("APPEND CARD", it) }
+			return false
 		}
 	}
 }
