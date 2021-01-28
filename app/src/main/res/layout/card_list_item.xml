@@ -12,7 +12,7 @@
 
         <TextView
                 android:id="@+id/card_item_title_text"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,7 @@
 
         <TextView
                 android:id="@+id/card_item_content_text"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_item_title_text"
@@ -35,7 +35,7 @@
 
         <TextView
                 android:id="@+id/card_item_date_created_text"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_item_content_text"
@@ -44,7 +44,7 @@
 
         <TextView
                 android:id="@+id/card_item_status_text"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +54,7 @@
 
         <TextView
                 android:id="@+id/card_item_city_text"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/card_item_date_created_text"

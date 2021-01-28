@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities">
+        <item>Нур-Султан</item>
+        <item>Алматы</item>
+        <item>Шымкент</item>
+        <item>Караганда</item>
+        <item>Тараз</item>
+        <item>Кызылорда</item>
+        <item>Павлодар</item>
+        <item>Усть-Каменогорск</item>
+        <item>Семей</item>
+        <item>Актобе</item>
+        <item>Кокшетау</item>
+        <item>Туркистан</item>
+        <item>Талдыкорган</item>
+        <item>Костанай</item>
+        <item>Петропавловск</item>
+        <item>Уральск</item>
+        <item>Атырау</item>
+        <item>Актау</item>
+        <item>Экибастуз</item>
+        <item>Жезказган</item>
+    </string-array>
+</resources>

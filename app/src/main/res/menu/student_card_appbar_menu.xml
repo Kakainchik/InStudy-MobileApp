@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/appbar_refresh_card"
+            android:enabled="true"
+            android:title="@string/menu_refresh_card"
+            android:icon="@drawable/ic_sharp_refresh_24"
+            app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/appbar_add_card"
             android:enabled="true"
             android:title="@string/menu_add_card"

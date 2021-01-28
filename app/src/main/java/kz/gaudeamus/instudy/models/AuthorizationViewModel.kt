@@ -26,7 +26,7 @@ class AuthorizationViewModel(application: Application) : AndroidViewModel(applic
 		signinLiveData.value = Resource(Status.PROCESING, null, null)
 
 		//Запускаем процесс
-		val job = viewModelScope.launch(Dispatchers.Main + SupervisorJob()){
+		viewModelScope.launch(Dispatchers.Main + SupervisorJob()){
 
 			//Получаем результат
 			val result: Resource<AuthenticationResponse> = try {

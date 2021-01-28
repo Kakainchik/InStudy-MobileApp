@@ -6,52 +6,24 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.AccountKind
 
 internal const val REQUEST_AUTHORIZATION: Int = 200
+internal const val DATABASE_NAME = "INSTUDY-DATABASE"
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    Toolbar.OnMenuItemClickListener {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var currentUser: Account? = null
     private lateinit var navigationMenu: BottomNavigationView
-    private lateinit var appBar: MaterialToolbar
     private lateinit var container: FragmentContainerView
     private lateinit var cardFragment: Fragment
-
-    private val callback = object: ActionMode.Callback {
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.action_bar_menu, menu)
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            return false
-        }
-
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return when(item?.itemId) {
-                R.id.actionbar_delete_card -> {
-                    true
-                }
-                else -> false
-            }
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode?) {
-            //NOTHING
-        }
-
-    }
+    private lateinit var settingsFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Возвращаем стандартную тему после SplashScreen
@@ -61,17 +33,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         //Визуальные компоненты
         navigationMenu = findViewById(R.id.bottom_navigation)
-        appBar = findViewById(R.id.main_appbar)
         container = findViewById(R.id.main_fragment_container)
-
-        //Проверяем наличие аккаунта, если нет - переходим на авторизацию
-        //currentUser = IOFileHelper.anyAccountOrNull(this)
-        currentUser = Account(1, "s", "t", "r", AccountKind.STUDENT)
-        if(currentUser == null) {
-            startActivityForResult(Intent(this, LoginInActivity::class.java), REQUEST_AUTHORIZATION)
-        }
-        //Обновляем интерфейс под роль пользователя
-        else updateUIByAccount()
 
         //Настраиваем нижнее меню
         navigationMenu.apply {
@@ -79,9 +41,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             this.setOnNavigationItemSelectedListener(this@MainActivity)
         }
 
-        //Настраиваем верхнее меню
-        appBar.setOnMenuItemClickListener(this)
-        //startSupportActionMode(callback) //TODO Вызывает дополнительное меню - долго жмём на карточку
+        //Проверяем наличие аккаунта, если нет - переходим на авторизацию
+        currentUser = IOFileHelper.anyAccountOrNull(this)
+        if(currentUser == null) {
+            startActivityForResult(Intent(this, LoginInActivity::class.java), REQUEST_AUTHORIZATION)
+        }
+        //Обновляем интерфейс под роль пользователя
+        else updateUIByAccount()
     }
 
     /**
@@ -91,35 +57,27 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return when(item.itemId) {
             //Нажата вкладка карточек
             R.id.main_card_menu -> {
-                appBar.menu.clear()
-                appBar.inflateMenu(R.menu.student_card_appbar_menu)
-                supportFragmentManager.commit {
+                supportFragmentManager.commit(true) {
                     addToBackStack("Card")
                     setReorderingAllowed(true)
                     replace(R.id.main_fragment_container, cardFragment)
                 }
                 true
             }
+            //Нажата вкладка чата
             R.id.main_chat_menu -> {
                 true
             }
+            //Нажата вкладка настроек
             R.id.main_settings_menu -> {
+                supportFragmentManager.commit(true) {
+                    addToBackStack("Settings")
+                    setReorderingAllowed(true)
+                    replace(R.id.main_fragment_container, settingsFragment)
+                }
                 true
             }
             R.id.main_query_menu -> {
-                true
-            }
-            else -> false
-        }
-    }
-
-    /**
-     * Обработчик нажатия на верхнее меню.
-     */
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return when(item?.itemId) {
-            R.id.appbar_add_card -> { //Создаём новую карточку
-                startActivity(Intent(this, CreateCardActivity::class.java))
                 true
             }
             else -> false
@@ -137,6 +95,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        //NOTHING
+    }
+
     /**
      * Обновляет пользовательский интерфейс на основе имеющегося аккаунта.
      */
@@ -147,10 +110,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.moderator_bottom_navigation_menu)
                     this.selectedItemId = 0
-                    //this@MainActivity.onNavigationItemSelected(this.menu[this.selectedItemId])
                 }
-                //Верхнее меню
-
             }
             AccountKind.SCHOOL -> {
                 navigationMenu.apply {
@@ -159,6 +119,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 }
             }
             AccountKind.STUDENT -> {
+                this.settingsFragment = SettingsFragment()
                 this.cardFragment = StudentCardContainerFragment()
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.student_bottom_navigation_menu)

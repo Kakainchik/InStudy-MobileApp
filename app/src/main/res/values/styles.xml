@@ -51,4 +51,18 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
+    <style name="Widget.App.AutoCompleteTextView.Card" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="maxLines">1</item>
+        <item name="android:inputType">textAutoComplete</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Widget.App.EditText.Card" parent="Widget.AppCompat.EditText">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+    </style>
+
 </resources>

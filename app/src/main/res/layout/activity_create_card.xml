@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/create_card_container"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CreateCardActivity"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:clipToPadding="false">
 
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/create_card_content"
@@ -27,8 +29,9 @@
                     android:id="@+id/create_card_title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="What do you look for?"
-                    android:maxLines="1"/>
+                    android:hint="@string/title_title"
+                    android:maxLines="1"
+                    style="@style/Widget.App.EditText.Card"/>
 
             <View style="@style/Divider"/>
 
@@ -37,8 +40,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
-                    android:hint="Any comment"
-                    android:gravity="clip_vertical"/>
+                    android:hint="@string/title_written_comment"
+                    android:gravity="clip_vertical"
+                    style="@style/Widget.App.EditText.Card"/>
 
         </LinearLayout>
 
@@ -47,7 +51,7 @@
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/create_card_contact"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/create_card_content"
             android:layout_marginTop="20dp"
             android:paddingVertical="@dimen/vertical_padding_card"
@@ -57,12 +61,34 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="@dimen/vertical_padding_card">
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/vertical_padding_card"
+                android:orientation="vertical">
 
-            <Spinner
+            <AutoCompleteTextView
+                    android:id="@+id/cities_autotext"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title_written_city"
+                    style="@style/Widget.App.AutoCompleteTextView.Card"/>
+
+            <View style="@style/Divider"/>
+
+            <AutoCompleteTextView
+                    android:id="@+id/faculties_autotext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title_written_faculty"
+                    style="@style/Widget.App.AutoCompleteTextView.Card"/>
+
+            <View style="@style/Divider"/>
+
+            <AutoCompleteTextView
+                    android:id="@+id/specialities_autotext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title_written_speciality"
+                    style="@style/Widget.App.AutoCompleteTextView.Card"/>
 
         </LinearLayout>
 
@@ -85,5 +111,18 @@
             app:layout_constraintTop_toTopOf="@id/create_card_create_button"
             android:text="@string/bt_save2draft_card"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+    <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:gravity="center"
+            android:visibility="gone"
+            android:elevation="1dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

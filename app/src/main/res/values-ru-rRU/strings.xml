@@ -45,4 +45,12 @@
     <string name="status_card_expired">Устарел</string>
     <string name="bt_create_card">Создать</string>
     <string name="bt_save2draft_card">В черновик</string>
+    <string name="menu_refresh_card">Обновить</string>
+    <string name="bt_save">Сохранить</string>
+    <string name="title_written_city">Город, который я ищу</string>
+    <string name="title_written_speciality">Специальность, которую я ищу</string>
+    <string name="title_written_faculty">Факультет, который я ищу</string>
+    <string name="title_title">Заголовок</string>
+    <string name="title_written_comment">Мои пожелания(необязательно)</string>
+    <string name="error_fill_fields">Заполните поля!</string>
 </resources>

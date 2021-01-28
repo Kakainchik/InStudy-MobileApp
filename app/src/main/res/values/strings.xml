@@ -47,4 +47,13 @@
     <string name="status_card_expired">Expired</string>
     <string name="bt_create_card">Create</string>
     <string name="bt_save2draft_card">Save as draft</string>
+    <string name="menu_refresh_card">Refresh</string>
+    <string name="bt_save">Save</string>
+    <string name="title_written_city">City where I look for</string>
+    <string name="title_written_speciality">Speciality what I look for</string>
+    <string name="title_written_faculty">Faculty what I look for</string>
+    <string name="title_title">Title</string>
+    <string name="title_written_comment">My comment(optional)</string>
+    <string name="error_fill_fields">Empty fields!</string>
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

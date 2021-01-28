@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities">
+        <item>Nur-Sultan</item>
+        <item>Almaty</item>
+        <item>Shymkent</item>
+        <item>Karagandy</item>
+        <item>Taraz</item>
+        <item>Kyzylorda</item>
+        <item>Pavlodar</item>
+        <item>Ust-Kamenogorsk</item>
+        <item>Semey</item>
+        <item>Aktobe</item>
+        <item>Kokshetau</item>
+        <item>Turkistan</item>
+        <item>Taldykorgan</item>
+        <item>Kostanay</item>
+        <item>Petropavl</item>
+        <item>Oral</item>
+        <item>Atyrau</item>
+        <item>Aktau</item>
+        <item>Ekibastuz</item>
+        <item>Zhezqazghan</item>
+    </string-array>
+</resources>

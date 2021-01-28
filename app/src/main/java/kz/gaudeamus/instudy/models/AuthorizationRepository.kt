@@ -1,7 +1,5 @@
 package kz.gaudeamus.instudy.models
 
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.request.*
@@ -18,39 +16,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kz.gaudeamus.instudy.entities.*
 
-private const val HOSTNAME = "http://95.59.10.62:44338"
-private const val REGISTRATION_URL = "$HOSTNAME/api/registration/"
-private const val AUTHORIZATION_URL = "$HOSTNAME/api/login/auth"
-
-private const val CONTENT_TYPE = "application/json"
-private const val ACCEPT = CONTENT_TYPE
-private const val CONNECTION = "keep-alive"
-private const val SHORT_TIMEOUT = 5_000L
-private const val AVERAGE_TIMEOUT = 15_000L
-private const val LONG_TIMEOUT = 30_000L
-
-final class AuthorizationRepository {
-
-	//Используем отдельный клиент для каждого метода, так как ktor забагован для использования async
-	private fun initClient() : HttpClient =
-		HttpClient(OkHttp) {
-			//Ожидаем, что будем получать не только HTTP200
-			expectSuccess = false
-			//Устанавливаем настройки по умолчанию для запросов
-			install(DefaultRequest) {
-				headers {
-					append("Accept", ACCEPT)
-					append("Connection", CONNECTION)
-				}
-			}
-			install(HttpTimeout)
-			install(HttpCookies)
-			engine {
-				config {
-					retryOnConnectionFailure(true)
-				}
-			}
-		}
+final class AuthorizationRepository : KtorRepository() {
 
 	/**
 	 * Ассинхронно делает общий запрос на регистрацию по типу пользователя.
@@ -71,9 +37,8 @@ final class AuthorizationRepository {
 			}
 
 			val body = Json {ignoreUnknownKeys = true }.decodeFromString<RegistrationResponse>(response.readText())
-			val code = response.status
-			when(code.value) {
-				200 -> Resource(Status.COMPLETED, body, null)
+			when(response.status) {
+				HttpStatusCode.OK -> Resource(Status.COMPLETED, body, null)
 				else -> Resource(Status.CANCELED, null, body.message)
 			}
 		}
@@ -112,9 +77,8 @@ final class AuthorizationRepository {
 				}
 			}
 
-			val code = response.status
-			when(code.value) {
-				200 -> {
+			when(response.status) {
+				HttpStatusCode.OK -> {
 					val body = Json {
 						ignoreUnknownKeys = true
 					}.decodeFromString<AuthenticationResponse>(response.readText())
@@ -131,5 +95,10 @@ final class AuthorizationRepository {
 				}
 			}
 		}
+	}
+
+	companion object {
+		internal const val REGISTRATION_URL = "$HOSTNAME/api/registration/"
+		internal const val AUTHORIZATION_URL = "$HOSTNAME/api/login/auth"
 	}
 }
