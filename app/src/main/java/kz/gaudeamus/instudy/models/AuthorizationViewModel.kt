@@ -3,19 +3,16 @@ package kz.gaudeamus.instudy.models
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.client.features.*
-import io.ktor.network.sockets.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kz.gaudeamus.instudy.R
 import kz.gaudeamus.instudy.SingleLiveEvent
 import kz.gaudeamus.instudy.entities.AuthenticationResponse
 import kz.gaudeamus.instudy.entities.AuthorizationRequest
-import java.lang.Exception
+import kz.gaudeamus.instudy.models.HttpTask.*
 
 class AuthorizationViewModel(application: Application) : AndroidViewModel(application) {
-	public val signinLiveData = SingleLiveEvent<Resource<AuthenticationResponse>>()
+	public val signinLiveData = SingleLiveEvent<HttpTask<AuthenticationResponse>>()
 	private val regRepository = AuthorizationRepository()
 
 	/**
@@ -23,23 +20,14 @@ class AuthorizationViewModel(application: Application) : AndroidViewModel(applic
 	 */
 	fun authorize(user: AuthorizationRequest) {
 		//Устанавливаем метку как "идущий процесс"
-		signinLiveData.value = Resource(Status.PROCESING, null, null)
+		signinLiveData.value = HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE)
 
 		//Запускаем процесс
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()){
 
 			//Получаем результат
-			val result: Resource<AuthenticationResponse> = try {
+			val result: HttpTask<AuthenticationResponse> = regRepository.makeRequest {
 				regRepository.makeAuthorizationRequest(user)
-			} catch(ex: ConnectTimeoutException) {
-				val error: String = getApplication<Application>().getString(R.string.error_http_timeout)
-				Resource(Status.CANCELED, null, error)
-			} catch(ex: HttpRequestTimeoutException) {
-				val error: String = getApplication<Application>().getString(R.string.error_http_timeout)
-				Resource(Status.CANCELED, null, error)
-			} catch(ex: Exception) {
-				val error: String = getApplication<Application>().getString(R.string.error_http_connect)
-				Resource(Status.CANCELED, null, error)
 			}
 
 			//Устанавливаем значение ресурса ассинхронно

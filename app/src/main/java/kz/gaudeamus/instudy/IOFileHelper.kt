@@ -14,14 +14,12 @@ import java.nio.charset.Charset
 
 object IOFileHelper {
 
-	internal const val ACCOUNT_FILE_NAME = "USER_DATA.json"
-	internal const val CARDS_FILE_NAME = "CARDS_DATA.json"
+	private const val ACCOUNT_FILE_NAME = "USER_DATA.json"
 
 	/**
 	 *	Возвращает текущий активный аккаунт в приложении либо null, если такового не имеется.
 	 */
 	public fun anyAccountOrNull(context: Context): Account? {
-
 		val file = File(context.dataDir, ACCOUNT_FILE_NAME)
 
 		//Если нет файла - сразу создаём и возвращаем null
@@ -62,37 +60,11 @@ object IOFileHelper {
 	}
 
 	/**
-	 * Добавляет новую карточку в список всех других карт студента.
+	 * Удаляет файл с аккаунтом пользователя.
 	 */
-	public fun appendCard2Student(context: Context, card: Card) : Boolean {
-		val file = File(context.dataDir, CARDS_FILE_NAME)
+	public fun deleteAccount(context: Context): Boolean {
+		val file = File(context.dataDir, ACCOUNT_FILE_NAME)
 
-		try {
-			if(!file.exists()) {
-				file.createNewFile()
-				Log.i("APPEND CARD", "Creating new empty file")
-
-				context.openFileOutput(file.name, Context.MODE_PRIVATE).use {
-					it.write("""[]""".toByteArray())
-				}
-			}
-
-			var cards: Array<Card> = arrayOf()
-			val json = context.openFileInput(file.name).use {
-				val bytes = it.readBytes()
-				bytes.toString(Charset.defaultCharset())
-			}
-
-			cards = Json.decodeFromString(json)
-			cards = cards.plus(card)
-
-			context.openFileOutput(file.name, Context.MODE_PRIVATE).use {
-				it.write(Json.encodeToString(cards).toByteArray())
-			}
-			return true
-		} catch(ex: Exception) {
-			ex.message?.let { Log.e("APPEND CARD", it) }
-			return false
-		}
+		return file.delete()
 	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -21,4 +22,106 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-</FrameLayout>
+    <TextView
+            android:id="@+id/settings_fullname_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/main_appbar_layout"
+            android:layout_marginTop="@dimen/top_margin_settings"
+            android:text="Name Surname"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:textStyle="normal"
+            android:fontFamily="sans-serif"
+            android:textSize="@dimen/title_settings_fullname_text_size"/>
+
+    <TextView
+            android:id="@+id/settings_email_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_fullname_text"
+            android:text="sample@gmail.com"
+            android:textAlignment="center"
+            android:textStyle="normal"
+            android:fontFamily="sans-serif-light"
+            android:autoLink="none"/>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/settings_account_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_email_text"
+            android:layout_marginTop="@dimen/top_margin_settings"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_card"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="4dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/vertical_padding_card"
+                android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_account"
+                    android:fontFamily="sans-serif-black"/>
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settings_contact_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.MaterialButton.Settings"
+                    android:text="@string/bt_change_contact_information"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/settings_security_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_account_card"
+            android:layout_marginTop="@dimen/top_margin_settings"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_card"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="4dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/vertical_padding_card"
+                android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_security"
+                    android:fontFamily="sans-serif-black"/>
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settings_password_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.MaterialButton.Settings"
+                    android:text="@string/bt_change_password"/>
+
+            <View style="@style/Divider"/>
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settings_logout_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.MaterialButton.Settings"
+                    android:text="@string/bt_logout"
+                    android:textColor="@color/colorAlert"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

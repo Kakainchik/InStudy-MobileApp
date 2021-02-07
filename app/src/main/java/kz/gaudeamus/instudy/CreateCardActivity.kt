@@ -1,8 +1,6 @@
 package kz.gaudeamus.instudy
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,13 +10,13 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.ContentLoadingProgressBar
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import kz.gaudeamus.instudy.entities.AddCardRequest
 import kz.gaudeamus.instudy.entities.Card
 import kz.gaudeamus.instudy.entities.CardStatus
 import kz.gaudeamus.instudy.models.CardStudentViewModel
-import kz.gaudeamus.instudy.models.Status
+import kz.gaudeamus.instudy.models.HttpTask.*
 import java.time.LocalDate
 
 class CreateCardActivity : AppCompatActivity() {
@@ -33,7 +31,7 @@ class CreateCardActivity : AppCompatActivity() {
 	private lateinit var cityAutoText: AutoCompleteTextView
 	private lateinit var facultiesAutoText: AutoCompleteTextView
 	private lateinit var specialitiesAutoText: AutoCompleteTextView
-	private lateinit var progressBar: ProgressBar
+	private lateinit var progressBar: ContentLoadingProgressBar
 	private lateinit var activityContainer: ConstraintLayout
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,13 +148,13 @@ class CreateCardActivity : AppCompatActivity() {
 
 				//Наблюдаем за процессом работы отправки на сервер
 				cardModel.sendLiveData.observe(this, { storeData ->
-					when(storeData.status) {
-						Status.PROCESING -> {
+					when(storeData.taskStatus) {
+						TaskStatus.PROCESSING -> {
 							progressBar.visibility = View.VISIBLE
 							UIHelper.makeEnableUI(false, activityContainer)
 						}
 						//Если отправка на сервер прошла успешно
-						Status.COMPLETED -> {
+						TaskStatus.COMPLETED -> {
 							progressBar.visibility = View.GONE
 							UIHelper.makeEnableUI(true, activityContainer)
 
@@ -167,10 +165,10 @@ class CreateCardActivity : AppCompatActivity() {
 								cardModel.addToDB(card)
 							}
 						}
-						Status.CANCELED -> {
+						TaskStatus.CANCELED -> {
 							progressBar.visibility = View.GONE
 							UIHelper.makeEnableUI(true, activityContainer)
-							Toast.makeText(this, storeData.error, Toast.LENGTH_SHORT).show()
+							UIHelper.toastInternetConnectionError(this, storeData.webStatus)
 						}
 					}
 				})

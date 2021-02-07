@@ -53,4 +53,14 @@
     <string name="title_title">Заголовок</string>
     <string name="title_written_comment">Мои пожелания(необязательно)</string>
     <string name="error_fill_fields">Заполните поля!</string>
+    <string name="title_account">Аккаунт</string>
+    <string name="bt_change_password">Изменить пароль</string>
+    <string name="bt_change_contact_information">Изменить контактные данные</string>
+    <string name="bt_logout">Выйти из аккаунта</string>
+    <string name="title_security">Безопасность</string>
+    <string name="bt_update_password">Обновить пароль</string>
+    <string name="bt_forgot_password">Я забыл пароль</string>
+    <string name="title_old_password">Старый пароль</string>
+    <string name="title_new_password">Новый пароль</string>
+    <string name="notice_password_updated">Пароль успешно обновлён!</string>
 </resources>

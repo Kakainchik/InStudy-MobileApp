@@ -13,11 +13,12 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="50dp"/>
 
-    <ProgressBar android:id="@+id/progressbar"
+    <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            style="@style/Widget.AppCompat.ProgressBar"
+            style="?android:attr/progressBarStyle"
             android:visibility="gone"/>
 
 </FrameLayout>

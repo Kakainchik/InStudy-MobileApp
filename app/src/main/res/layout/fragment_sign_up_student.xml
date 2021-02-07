@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@id/signup_student_text"
             android:textAlignment="center"
             android:fontFamily="sans-serif-condensed-light"
-            android:textSize="@dimen/title_text_smalldescription"
+            android:textSize="@dimen/title_text_smalldescription_size"
             android:text="@string/title_as_student"/>
 
     <!-- E-mail -->

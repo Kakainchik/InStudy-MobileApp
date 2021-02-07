@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00C36A</color>
     <color name="colorAccent">#3E65AD</color>
     <color name="colorBackground">#F3F3F3</color>
+    <color name="colorAlert">#D50000</color>
 
     <color name="colorTextBoxBackground">#ECECEC</color>
     <color name="colorContextualAppbarBackground">#4E4E4E</color>

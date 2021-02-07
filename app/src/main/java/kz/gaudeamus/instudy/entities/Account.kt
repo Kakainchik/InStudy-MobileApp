@@ -16,4 +16,4 @@ data class Account(val id: Int,
 				   val email: String,
 				   val token: String,
 				   val refreshToken: String,
-				   val kind: AccountKind)
+				   val kind: AccountKind) : java.io.Serializable

@@ -33,11 +33,11 @@ data class AuthenticationResponse(val id: Int,
 								  var refreshToken: String? = null)
 
 @Serializable
-data class AddCardResponse(val id: Long,
-						   val title: String,
-						   val content: String,
-						   val soughtCity: String,
-						   val faculty: String,
-						   val speciality: String,
-						   val created: String,
-						   val isValid: Boolean)
+data class CardResponse(val id: Long,
+						val title: String,
+						val content: String,
+						val soughtCity: String,
+						val faculty: String,
+						val speciality: String,
+						val created: String,
+						val isValid: Boolean)

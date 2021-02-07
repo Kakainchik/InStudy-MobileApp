@@ -1,11 +1,14 @@
 package kz.gaudeamus.instudy
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
+import android.util.Log
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
@@ -14,10 +17,16 @@ import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.AccountKind
 
-internal const val REQUEST_AUTHORIZATION: Int = 200
-internal const val DATABASE_NAME = "INSTUDY-DATABASE"
-
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, OnLogoutListener {
+    /**
+     * Обработчик события на авторизацию пользователя из [LoginInActivity]
+     */
+    private val loginCallback: ActivityResultLauncher<Nothing> = registerForActivityResult(LoginActivityContract()) {
+        if(it) {
+            currentUser = IOFileHelper.anyAccountOrNull(this)
+            updateUIByAccount()
+        }
+    }
 
     private var currentUser: Account? = null
     private lateinit var navigationMenu: BottomNavigationView
@@ -43,9 +52,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         //Проверяем наличие аккаунта, если нет - переходим на авторизацию
         currentUser = IOFileHelper.anyAccountOrNull(this)
-        if(currentUser == null) {
-            startActivityForResult(Intent(this, LoginInActivity::class.java), REQUEST_AUTHORIZATION)
-        }
+        if(currentUser == null) loginCallback.launch(null)
         //Обновляем интерфейс под роль пользователя
         else updateUIByAccount()
     }
@@ -58,7 +65,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             //Нажата вкладка карточек
             R.id.main_card_menu -> {
                 supportFragmentManager.commit(true) {
-                    addToBackStack("Card")
+                    addToBackStack("StudentCardContainerFragment")
                     setReorderingAllowed(true)
                     replace(R.id.main_fragment_container, cardFragment)
                 }
@@ -71,7 +78,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             //Нажата вкладка настроек
             R.id.main_settings_menu -> {
                 supportFragmentManager.commit(true) {
-                    addToBackStack("Settings")
+                    addToBackStack("SettingsFragment")
                     setReorderingAllowed(true)
                     replace(R.id.main_fragment_container, settingsFragment)
                 }
@@ -84,20 +91,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //Ответы от авторизации пока что только
-        when(resultCode) {
-            RESULT_OK -> {
-                currentUser = IOFileHelper.anyAccountOrNull(this)
-                updateUIByAccount()
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
     override fun onBackPressed() {
         //super.onBackPressed()
         //NOTHING
+    }
+
+    override fun onLogout() {
+        if(IOFileHelper.deleteAccount(this)) loginCallback.launch(null)
+        else Log.w("LOGOUT", "Unexpected error. Couldn't delete account file.")
     }
 
     /**
@@ -126,6 +127,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     this@MainActivity.onNavigationItemSelected(this.menu.getItem(0))
                 }
             }
+        }
+    }
+
+    /**
+     * Класс для перехода на страницу авторизации и получения итогового результата от неё.
+     */
+    private class LoginActivityContract : ActivityResultContract<Nothing, Boolean>() {
+        override fun createIntent(context: Context, input: Nothing?): Intent {
+            return Intent(context, LoginInActivity::class.java)
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): Boolean {
+            return resultCode == Activity.RESULT_OK
         }
     }
 }

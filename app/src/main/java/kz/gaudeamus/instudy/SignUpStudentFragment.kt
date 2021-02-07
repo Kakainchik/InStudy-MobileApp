@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
@@ -15,8 +13,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kz.gaudeamus.instudy.entities.AccountKind
 import kz.gaudeamus.instudy.entities.RegistrationStudentRequest
+import kz.gaudeamus.instudy.models.HttpTask.*
 import kz.gaudeamus.instudy.models.RegistrationStudentViewModel
-import kz.gaudeamus.instudy.models.Status
 import java.lang.ClassCastException
 
 class SignUpStudentFragment : Fragment() {
@@ -96,12 +94,12 @@ class SignUpStudentFragment : Fragment() {
                 model.signinLiveData.observe(this.viewLifecycleOwner, { storeData ->
                     val resource = storeData?.data
 
-                    when(storeData.status) {
-                        Status.PROCESING -> {
+                    when(storeData.taskStatus) {
+                        TaskStatus.PROCESSING -> {
                             //Операция в процессе, блокируем интерфейс
                             this.loginInFragmentListener?.onBlockUI(false)
                         }
-                        Status.COMPLETED -> {
+                        TaskStatus.COMPLETED -> {
                             //Операция завершена, разблокируем интерфейс
                             this.loginInFragmentListener?.onBlockUI(true)
                             Toast.makeText(context, resource?.message, Toast.LENGTH_SHORT).show()
@@ -110,10 +108,10 @@ class SignUpStudentFragment : Fragment() {
                             this.loginInFragmentListener?.onFragmentInteraction(LoginInActivity.KindaFragment.SIGN_IN)
                             this.loginInFragmentListener?.onRegistered(AccountKind.STUDENT)
                         }
-                        Status.CANCELED -> {
+                        TaskStatus.CANCELED -> {
                             //Операция отменена, разблокируем интерфейс и выводим сообщение
                             this.loginInFragmentListener?.onBlockUI(true)
-                            Toast.makeText(context, storeData.error, Toast.LENGTH_SHORT).show()
+                            UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
                         }
                     }
                 })

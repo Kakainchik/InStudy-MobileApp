@@ -61,7 +61,7 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingVertical="@dimen/vertical_padding_card"
                 android:orientation="vertical">
 
@@ -112,7 +112,7 @@
             android:text="@string/bt_save2draft_card"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
-    <ProgressBar
+    <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -120,9 +120,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:gravity="center"
-            android:visibility="gone"
+            style="?android:attr/progressBarStyle"
+            android:visibility="visible"
             android:elevation="1dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@ import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.AccountKind
 import kz.gaudeamus.instudy.entities.AuthorizationRequest
 import kz.gaudeamus.instudy.models.AuthorizationViewModel
-import kz.gaudeamus.instudy.models.Status
+import kz.gaudeamus.instudy.models.HttpTask.*
 import java.lang.ClassCastException
 
 class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
@@ -75,12 +75,12 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 model.signinLiveData.observe(this.viewLifecycleOwner, { storeData ->
                     val resource = storeData?.data
 
-                    when(storeData.status) {
-                        Status.PROCESING -> {
+                    when(storeData.taskStatus) {
+                        TaskStatus.PROCESSING -> {
                             //Операция в процессе, блокируем интерфейс
                             this.loginInFragmentListener?.onBlockUI(false)
                         }
-                        Status.COMPLETED -> {
+                        TaskStatus.COMPLETED -> {
                             //Операция завершена, разблокируем интерфейс
                             this.loginInFragmentListener?.onBlockUI(true)
 
@@ -100,10 +100,10 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                                Toast.LENGTH_SHORT).show()
                             }
                         }
-                        Status.CANCELED -> {
+                        TaskStatus.CANCELED -> {
                             //Операция отменена, разблокируем интерфейс и выводим сообщение
                             this.loginInFragmentListener?.onBlockUI(true)
-                            Toast.makeText(context, storeData.error, Toast.LENGTH_SHORT).show()
+                            UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
                         }
                     }
                 })

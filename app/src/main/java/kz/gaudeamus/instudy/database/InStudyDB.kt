@@ -14,4 +14,8 @@ import kz.gaudeamus.instudy.entities.Card
 abstract class InStudyDB : RoomDatabase() {
 
 	abstract fun cardDao(): CardDAO
+
+	internal companion object {
+		internal const val DATABASE_NAME = "INSTUDY-DATABASE"
+	}
 }

@@ -14,6 +14,9 @@ interface CardDAO {
 	@Delete
 	suspend fun delete(card: Card)
 
+	@Query("""DELETE FROM cards WHERE status != 'DRAFT' OR id != null""")
+	suspend fun deleteAllNonDrafts()
+
 	@Query("SELECT * FROM cards")
 	suspend fun getAll() : List<Card>
 

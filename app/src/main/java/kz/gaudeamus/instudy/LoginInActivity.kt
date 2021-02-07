@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.commit
 import kz.gaudeamus.instudy.UIHelper.makeEnableUI
 import kz.gaudeamus.instudy.entities.Account
@@ -16,12 +17,12 @@ import kz.gaudeamus.instudy.entities.AccountKind
  * @return `true` if current password matches the matcher's pattern
  */
 public fun isPasswordValid(password: String?): Boolean {
-    password?.let {
+    return password?.let {
         val passwordPattern = """^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{7,}$"""
         val passwordMatcher = Regex(passwordPattern)
 
-        return passwordMatcher.find(it) != null
-    } ?: return false
+        passwordMatcher.find(it) != null
+    } ?: false
 }
 
 class LoginInActivity : AppCompatActivity(), OnLoginInFragmentListener {
@@ -30,7 +31,7 @@ class LoginInActivity : AppCompatActivity(), OnLoginInFragmentListener {
     private val signUpSchoolFragment: SignUpSchoolFragment
     private val signUpStudentFragment: SignUpStudentFragment
     private var currentFragment: KindaFragment
-    private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar: ContentLoadingProgressBar
     private lateinit var container: FrameLayout
 
     init {

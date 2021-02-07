@@ -52,3 +52,15 @@ data class RegistrationStudentRequest(val email: String,
 @Serializable
 data class AuthorizationRequest(val email: String,
 								val password: String)
+
+/**
+ * Модель запроса на обновление пароля пользователя.
+ * 	@see
+ * 	{
+ * 		"oldPassword": "OldQwerty",
+ * 		"newPassword": "newQwerty"
+ * 	}
+ */
+@Serializable
+data class UpdatePasswordRequest(val oldPassword: String,
+								 val newPassword: String)

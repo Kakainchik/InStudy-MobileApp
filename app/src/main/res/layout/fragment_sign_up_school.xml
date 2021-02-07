@@ -25,7 +25,7 @@
             app:layout_constraintTop_toBottomOf="@id/signup_school_text"
             android:textAlignment="center"
             android:fontFamily="sans-serif-condensed-light"
-            android:textSize="@dimen/title_text_smalldescription"
+            android:textSize="@dimen/title_text_smalldescription_size"
             android:text="@string/title_as_school"/>
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -191,6 +191,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:textAlignment="center"
             android:fontFamily="sans-serif"
-            android:textSize="@dimen/title_text_smalldescription"/>
+            android:textSize="@dimen/title_text_smalldescription_size"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
