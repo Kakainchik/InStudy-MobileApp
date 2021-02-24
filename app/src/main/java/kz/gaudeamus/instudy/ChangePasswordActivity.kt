@@ -3,6 +3,7 @@ package kz.gaudeamus.instudy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ContentLoadingProgressBar
@@ -71,6 +72,9 @@ class ChangePasswordActivity : AppCompatActivity() {
 
 			//Если нет ошибок - отправляем запрос
 			if(isValid) {
+				val request = UpdatePasswordRequest(oldPassword =  oldPasswordText.text.toString(),
+													newPassword = newPasswordText.text.toString())
+
 				//Наблюдаем за ходом работы
 				model.updatePassLiveData.observe(this, { storeData ->
 					when(storeData.taskStatus) {
@@ -88,16 +92,24 @@ class ChangePasswordActivity : AppCompatActivity() {
 						}
 						//Ошибка
 						TaskStatus.CANCELED -> {
-							progressBar.hide()
-							UIHelper.makeEnableUI(true, container)
-							UIHelper.toastInternetConnectionError(this, storeData.webStatus)
+							//При устаревшем токене - пробуем обновить его и отправить запрос заново
+							if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
+								model.throughRefreshToken(this, bundle) { newAccount ->
+									model.updatePassword(newAccount, request)
+								}
+							} else {
+								UIHelper.makeEnableUI(true, container)
+								progressBar.hide()
+
+								if(storeData.webStatus == WebStatus.NONE)
+									Toast.makeText(this, getString(R.string.error_settings_invalid_password), Toast.LENGTH_SHORT).show()
+								else UIHelper.toastInternetConnectionError(this, storeData.webStatus)
+							}
 						}
 					}
 				})
 
 				//Отправляем запрос
-				val request = UpdatePasswordRequest(oldPassword =  oldPasswordText.text.toString(),
-													newPassword = newPasswordText.text.toString())
 				model.updatePassword(bundle, request)
 			}
 		}

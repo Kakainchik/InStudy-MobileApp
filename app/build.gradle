@@ -59,6 +59,7 @@ dependencies {
     implementation 'io.ktor:ktor-client-core:1.4.3'
     implementation 'io.ktor:ktor-client-android:1.4.3'
     implementation 'io.ktor:ktor-client-okhttp:1.4.3'
+    implementation "com.github.skydoves:expandablelayout:1.0.6"
     //Room DB
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"

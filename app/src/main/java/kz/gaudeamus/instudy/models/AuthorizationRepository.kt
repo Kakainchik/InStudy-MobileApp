@@ -9,14 +9,10 @@ import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import kz.gaudeamus.instudy.entities.*
 import kz.gaudeamus.instudy.models.HttpTask.*
 import java.net.URLDecoder
-import java.net.URLEncoder
 
 final class AuthorizationRepository : KtorRepository() {
 
@@ -52,7 +48,7 @@ final class AuthorizationRepository : KtorRepository() {
 	 * Ассинхронно отправляет запрос на регистрацию школы
 	 */
 	suspend fun makeRegistrationRequest(request: RegistrationSchoolRequest) : HttpTask<RegistrationResponse> {
-		return makeRegistrationRequest(Json {encodeDefaults = true }.encodeToString(request), AccountKind.SCHOOL)
+		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.SCHOOL)
 	}
 
 	/**
@@ -142,7 +138,7 @@ final class AuthorizationRepository : KtorRepository() {
 					header(AUTHORIZATION_HEADER, activeToken)
 
 					val json = Json.encodeToString(request)
-					body = TextContent(Json.encodeToString(json), ContentType.Application.Json)
+					body = TextContent(json, ContentType.Application.Json)
 				}
 			}
 

@@ -121,7 +121,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             style="?android:attr/progressBarStyle"
-            android:visibility="visible"
+            android:visibility="gone"
             android:elevation="1dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

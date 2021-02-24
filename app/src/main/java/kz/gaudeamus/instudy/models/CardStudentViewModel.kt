@@ -17,10 +17,10 @@ import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class CardStudentViewModel : AndroidViewModel {
+class CardStudentViewModel : StandardHttpViewModel {
 	private val db: InStudyDB
 	private val dao: CardDAO
-	private val repository: CardRepository = CardRepository()
+	protected override val repository = CardRepository()
 
 	public val localAddedCard = SingleLiveEvent<Long?>()
 	public val localUpdatedCard = SingleLiveEvent<Boolean>()
@@ -148,7 +148,10 @@ class CardStudentViewModel : AndroidViewModel {
 						if(task.data != null && task.data) {
 							dao.delete(it)
 							list.add(it)
-						} else deletedCards.postValue(HttpTask(TaskStatus.PROCESSING, null, task.webStatus))
+						} else {
+							deletedCards.postValue(HttpTask(TaskStatus.PROCESSING, null, task.webStatus))
+							return@forEach
+						}
 					}
 				} catch(ex: Exception) {
 					deletedCards.postValue(HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE))

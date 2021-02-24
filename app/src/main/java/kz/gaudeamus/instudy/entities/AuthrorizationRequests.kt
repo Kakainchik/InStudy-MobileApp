@@ -19,7 +19,7 @@ data class RegistrationSchoolRequest(val email: String,
 									 val password: String,
 									 val role: Int = AccountKind.SCHOOL.value,
 									 val organization: String,
-									 val props: Array<String>?)
+									 val props: Array<PropsResponse>?)
 
 /**
  * Модель запроса на регистрацию студента.

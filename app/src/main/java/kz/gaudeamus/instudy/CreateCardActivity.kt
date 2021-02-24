@@ -32,7 +32,7 @@ class CreateCardActivity : AppCompatActivity() {
 	private lateinit var facultiesAutoText: AutoCompleteTextView
 	private lateinit var specialitiesAutoText: AutoCompleteTextView
 	private lateinit var progressBar: ContentLoadingProgressBar
-	private lateinit var activityContainer: ConstraintLayout
+	private lateinit var container: ConstraintLayout
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -47,9 +47,9 @@ class CreateCardActivity : AppCompatActivity() {
 		facultiesAutoText = findViewById(R.id.faculties_autotext)
 		specialitiesAutoText = findViewById(R.id.specialities_autotext)
 		progressBar = findViewById(R.id.progressbar)
-		activityContainer = findViewById(R.id.create_card_container)
+		container = findViewById(R.id.create_card_container)
 
-		val bundle = intent.getSerializableExtra(NAME) as? Card
+		val bundle = intent.getSerializableExtra(NAME_EXTRA) as? Card
 		//Заполняем поля, если редактируем карточку, а не создаём новую
 		bundle?.apply {
 			titleText.setText(title)
@@ -84,7 +84,7 @@ class CreateCardActivity : AppCompatActivity() {
 			cardModel.localAddedCard.observe(this, { storeData ->
 				if(storeData != null) {
 					card.guid = storeData
-					setResult(ACTIVITY_CODE, Intent().putExtra(NAME, card))
+					setResult(RESULT_OK, Intent().putExtra(NAME_EXTRA, card))
 					this.finish()
 				} else {
 					Toast.makeText(this, "Cannot save card.", Toast.LENGTH_SHORT).show()
@@ -115,7 +115,7 @@ class CreateCardActivity : AppCompatActivity() {
 				//Наблюдаем за процессом работы
 				cardModel.localUpdatedCard.observe(this, { storeData ->
 					if(storeData) {
-						setResult(ACTIVITY_CODE, Intent().putExtra(NAME, card))
+						setResult(RESULT_OK, Intent().putExtra(NAME_EXTRA, card))
 						this.finish()
 					} else {
 						Toast.makeText(this, "Cannot update card.", Toast.LENGTH_SHORT).show()
@@ -123,6 +123,7 @@ class CreateCardActivity : AppCompatActivity() {
 					}
 				})
 
+				//TODO отправить обновлённую карточку на сервер
 				cardModel.updateToDB(card)
 			} else {
 				//Создаём новую
@@ -134,11 +135,18 @@ class CreateCardActivity : AppCompatActivity() {
 								created = LocalDate.now(),
 								status = CardStatus.ACTIVE)
 
+				val requestData = AddCardRequest(title = card.title,
+												 content = card.content,
+												 soughtCity = card.city,
+												 faculty = card.faculty,
+												 speciality = card.speciality)
+				val account = IOFileHelper.anyAccountOrNull(this)!!
+
 				//Наблюдаем за процессом работы локального добавления
 				cardModel.localAddedCard.observe(this, { storeData ->
 					if(storeData != null) {
 						card.guid = storeData
-						setResult(ACTIVITY_CODE, Intent().putExtra(NAME, card))
+						setResult(RESULT_OK, Intent().putExtra(NAME_EXTRA, card))
 						this.finish()
 					} else {
 						Toast.makeText(this, "Cannot save card.", Toast.LENGTH_SHORT).show()
@@ -150,38 +158,38 @@ class CreateCardActivity : AppCompatActivity() {
 				cardModel.sendLiveData.observe(this, { storeData ->
 					when(storeData.taskStatus) {
 						TaskStatus.PROCESSING -> {
-							progressBar.visibility = View.VISIBLE
-							UIHelper.makeEnableUI(false, activityContainer)
+							progressBar.show()
+							UIHelper.makeEnableUI(false, container)
 						}
 						//Если отправка на сервер прошла успешно
 						TaskStatus.COMPLETED -> {
-							progressBar.visibility = View.GONE
-							UIHelper.makeEnableUI(true, activityContainer)
+								progressBar.hide()
+								UIHelper.makeEnableUI(true, container)
 
-							//Обновляем id полученной карты и создаём её локально
-							storeData.data?.apply {
-								card.id = this.id
-								card.status = if(this.isValid) CardStatus.ACTIVE else CardStatus.EXPIRED
-								cardModel.addToDB(card)
+								//Обновляем id полученной карты и создаём её локально
+								storeData.data?.apply {
+									card.id = this.id
+									card.status =
+										if(this.isValid) CardStatus.ACTIVE else CardStatus.EXPIRED
+									cardModel.addToDB(card)
 							}
 						}
 						TaskStatus.CANCELED -> {
-							progressBar.visibility = View.GONE
-							UIHelper.makeEnableUI(true, activityContainer)
-							UIHelper.toastInternetConnectionError(this, storeData.webStatus)
+							//При устаревшем токене - пробуем обновить его и отправить запрос заново
+							if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
+								cardModel.throughRefreshToken(this, account) { newAccount ->
+									cardModel.sendToServer(requestData, newAccount)
+								}
+							} else {
+								progressBar.hide()
+								UIHelper.makeEnableUI(true, container)
+								UIHelper.toastInternetConnectionError(this, storeData.webStatus)
+							}
 						}
 					}
 				})
-
-				val requestData = AddCardRequest(title = card.title,
-												 content = card.content,
-												 soughtCity = card.city,
-												 faculty = card.faculty,
-												 speciality = card.speciality)
-
 				//Сначала пробуем отправить на сервер
-				val account = IOFileHelper.anyAccountOrNull(this)
-				account?.let { cardModel.sendToServer(requestData, it) }
+				cardModel.sendToServer(requestData, account)
 			}
 		}
 	}
@@ -231,7 +239,7 @@ class CreateCardActivity : AppCompatActivity() {
 	}
 
 	companion object {
-		public const val NAME: String = "CARD"
+		public const val NAME_EXTRA: String = "CARD"
 		public const val ACTIVITY_CODE = 101
 	}
 }

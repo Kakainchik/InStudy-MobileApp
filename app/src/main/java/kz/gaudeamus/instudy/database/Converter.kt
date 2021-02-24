@@ -3,6 +3,7 @@ package kz.gaudeamus.instudy.database
 import androidx.room.TypeConverter
 import kz.gaudeamus.instudy.entities.CardStatus
 import java.time.LocalDate
+import java.util.stream.Collectors
 
 class Converter {
 	@TypeConverter
@@ -16,4 +17,10 @@ class Converter {
 
 	@TypeConverter
 	fun toCardStatus(name: String) : CardStatus = CardStatus.valueOf(name)
+
+	@TypeConverter
+	fun fromProps(props: List<String>): String = props.stream().collect(Collectors.joining(","))
+
+	@TypeConverter
+	fun toProps(data: String): List<String> = data.split(",")
 }

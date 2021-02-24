@@ -17,7 +17,17 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".ChangePasswordActivity"></activity>
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="${applicationId}.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>
+        <activity android:name=".VerifyingQueryActivity"></activity>
+        <activity android:name=".ChangePasswordActivity"/>
         <activity android:name=".CreateCardActivity"/>
         <activity
                 android:name=".LoginInActivity"

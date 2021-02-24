@@ -13,8 +13,10 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kz.gaudeamus.instudy.entities.AuthenticationResponse
+import kz.gaudeamus.instudy.entities.RefreshTokenResponse
 import kz.gaudeamus.instudy.models.HttpTask.*
 import java.lang.Exception
+import java.net.URLDecoder
 
 abstract class KtorRepository {
 	//Используем отдельный клиент для каждого метода, так как ktor забагован для использования async
@@ -43,7 +45,7 @@ abstract class KtorRepository {
 	/**
 	 * Ассинхронно посылает POST запрос на получение нового токена по имеющемуся Refresh токену.
 	 */
-	protected open suspend fun makeRefreshTokenRequest(refreshToken: String): HttpTask<AuthenticationResponse> =
+	public open suspend fun makeRefreshTokenRequest(refreshToken: String): HttpTask<RefreshTokenResponse> =
 		withContext(Dispatchers.IO) {
 			val httpClient: HttpClient = initClient()
 			val response = httpClient.use {
@@ -53,7 +55,7 @@ abstract class KtorRepository {
 						socketTimeoutMillis = AVERAGE_TIMEOUT
 					}
 
-					header(REFRESH_TOKEN_COOKIE, refreshToken)
+					header(REFRESH_TOKEN_COOKIE, URLDecoder.decode(refreshToken, "UTF-8"))
 				}
 			}
 
@@ -61,14 +63,14 @@ abstract class KtorRepository {
 				HttpStatusCode.OK -> {
 					val body = Json {
 						ignoreUnknownKeys = true
-					}.decodeFromString<AuthenticationResponse>(response.readText())
+					}.decodeFromString<RefreshTokenResponse>(response.readText())
 					//Берём RefreshToken из куки
 					val cookies = httpClient.cookies(AuthorizationRepository.AUTHORIZATION_URL)
 					body.refreshToken = cookies[REFRESH_TOKEN_COOKIE]?.value
 
 					HttpTask(TaskStatus.COMPLETED, body, WebStatus.NONE)
 				}
-				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.UNAUTHORIZED)
 			}
 	}
 
@@ -88,7 +90,7 @@ abstract class KtorRepository {
 		}
 
 	companion object {
-		internal const val HOSTNAME = "http://95.59.10.62:44338/api"
+		internal const val HOSTNAME = "http://37.151.131.144:44338/api"
 		internal const val REFRESH_TOKEN_URL = "$HOSTNAME/login/refresh-token"
 
 		internal const val CONTENT_TYPE = "application/json"

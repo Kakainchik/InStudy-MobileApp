@@ -33,6 +33,10 @@ data class AuthenticationResponse(val id: Int,
 								  var refreshToken: String? = null)
 
 @Serializable
+data class RefreshTokenResponse(val token: String,
+								var refreshToken: String? = null)
+
+@Serializable
 data class CardResponse(val id: Long,
 						val title: String,
 						val content: String,
@@ -41,3 +45,7 @@ data class CardResponse(val id: Long,
 						val speciality: String,
 						val created: String,
 						val isValid: Boolean)
+
+@Serializable
+data class PropsResponse(val name: String,
+						 val data: String)

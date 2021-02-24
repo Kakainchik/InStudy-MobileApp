@@ -16,4 +16,7 @@ data class Account(val id: Int,
 				   val email: String,
 				   val token: String,
 				   val refreshToken: String,
-				   val kind: AccountKind) : java.io.Serializable
+				   val kind: AccountKind) : java.io.Serializable {
+	public fun updateToken(newToken: String, newRefreshToken: String): Account =
+		Account(id, email, newToken, newRefreshToken, kind)
+}

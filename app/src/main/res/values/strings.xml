@@ -65,5 +65,27 @@
     <string name="title_old_password">Old password</string>
     <string name="title_new_password">New password</string>
     <string name="notice_password_updated">Password updated successfully!</string>
+    <string name="error_sign_in_invalid_login_or_pass">Error: Invalid login or password.</string>
+    <string name="error_settings_invalid_password">Error: Invalid password.</string>
+    <string name="title_query_email" translatable="false">Email: %1$s</string>
+    <string name="title_contact_information">Contact information</string>
+    <string name="title_query_organization">Organization: %1$s</string>
+    <string name="notice_query_verified">Registration verified successfully!</string>
+    <string name="title_query_information">Query information</string>
+    <string name="title_query_created">Created: %1$s</string>
+    <string name="title_query_props">Their props</string>
+    <string name="intent_open_with">Open with...</string>
+    <string name="bt_verify">Verify</string>
+    <string name="bt_deny">Deny</string>
+    <string name="alert_sure_verify_query_text">Are you sure to verify this query?</string>
+    <string name="title_attention">Attention!</string>
+    <string name="bt_ok" translatable="false">Ok</string>
+    <string name="bt_cancel">Cancel</string>
+    <string name="error_cannot_verify_query">Unable verify query or this one already has been verified</string>
+    <string name="alert_deny_comment">Denying comment(optional)</string>
+    <string name="alert_sure_deny_query_text">Are you sure to deny this query?</string>
+    <string name="error_cannot_deny_query">Unable deny query or this one already has been denied.</string>
+    <string name="notice_query_denied">Registration denied succesfully!</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

@@ -1,11 +1,11 @@
 package kz.gaudeamus.instudy
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -13,6 +13,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.Card
 import kz.gaudeamus.instudy.models.CardAdapter
 import kz.gaudeamus.instudy.models.CardStudentViewModel
@@ -51,6 +52,13 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 
 	private var actionMode: ActionMode? = null
 	private var pickedCardIndex: Int = 0
+	private var currentAccount: Account? = null
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		currentAccount = IOFileHelper.anyAccountOrNull(requireContext())!!
+	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = inflater.inflate(R.layout.fragment_student_card_container, container, false)
@@ -88,22 +96,32 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 			cardModel.deletedCards.observe(this@StudentCardContainerFragment, { storeData ->
 				when(storeData.taskStatus) {
 					TaskStatus.PROCESSING -> {
-
+						UIHelper.makeEnableUI(false, container!!)
+						progressBar.show()
 					}
 					TaskStatus.COMPLETED -> {
 						storeData.data?.let { cards.removeAll(it) }
 						actionMode?.finish()
 						cardAdapter.notifyDataSetChanged()
 						this.notifyListEmptyOrNot()
+						UIHelper.makeEnableUI(true, container!!)
+						progressBar.hide()
 					}
 					TaskStatus.CANCELED -> {
-
+						//При устаревшем токене - пробуем обновить его и отправить запрос заново
+						if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
+							cardModel.throughRefreshToken(requireContext(), currentAccount!!) { newAccount ->
+								cardModel.delete(newAccount, *list.toTypedArray())
+							}
+						} else {
+							UIHelper.makeEnableUI(true, container!!)
+							progressBar.hide()
+						}
 					}
 				}
 			})
 
-			val account = IOFileHelper.anyAccountOrNull(requireContext())
-			account?.let { cardModel.delete(it, *list.toTypedArray()) }
+			cardModel.delete(currentAccount!!, *list.toTypedArray())
 		}
 
 
@@ -124,16 +142,23 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 			when(storeData.taskStatus) {
 				TaskStatus.PROCESSING -> {
 					UIHelper.makeEnableUI(false, container!!)
-					progressBar.visibility = View.VISIBLE
+					progressBar.show()
 				}
 				TaskStatus.COMPLETED -> {
 					cardModel.getAllFromDB()
 					UIHelper.makeEnableUI(true, container!!)
-					progressBar.visibility = View.GONE
+					progressBar.hide()
 				}
 				TaskStatus.CANCELED -> {
-					UIHelper.makeEnableUI(true, container!!)
-					progressBar.visibility = View.GONE
+					//При устаревшем токене - пробуем обновить его и отправить запрос заново
+					if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
+						cardModel.throughRefreshToken(requireContext(), currentAccount!!) { newAccount ->
+							cardModel.getOwnFromServerAndMergeWithDB(newAccount)
+						}
+					} else {
+						UIHelper.makeEnableUI(true, container!!)
+						progressBar.hide()
+					}
 				}
 			}
 		})
@@ -141,7 +166,6 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 		//Запускаем работу на получение карточек с локальной базы
 		cardModel.getAllFromDB()
 
-		//FIXME Метод запускается каждый раз при транзакции фрагментов, отчего картинка на фоне мерцает
 		return view
 	}
 
@@ -157,8 +181,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 			}
 			//Получаем все имеющиеся локальные карточки
 			R.id.appbar_refresh_card -> {
-				val account = IOFileHelper.anyAccountOrNull(requireContext())
-				account?.let { cardModel.getOwnFromServerAndMergeWithDB(it) }
+				cardModel.getOwnFromServerAndMergeWithDB(currentAccount!!)
 				true
 			}
 			else -> false
@@ -184,13 +207,13 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 	private class AddCardActivityContract : ActivityResultContract<Card?, Card?>() {
 		override fun createIntent(context: Context, input: Card?): Intent {
 			return Intent(context, CreateCardActivity::class.java).apply {
-				this.putExtra(CreateCardActivity.NAME, input)
+				this.putExtra(CreateCardActivity.NAME_EXTRA, input)
 			}
 		}
 
 		override fun parseResult(resultCode: Int, intent: Intent?): Card? {
-			val data = intent?.getSerializableExtra(CreateCardActivity.NAME) as? Card
-			return data.takeIf { resultCode == CreateCardActivity.ACTIVITY_CODE && it != null }
+			val data = intent?.getSerializableExtra(CreateCardActivity.NAME_EXTRA) as? Card
+			return data.takeIf { resultCode == Activity.RESULT_OK && it != null }
 		}
 	}
 }

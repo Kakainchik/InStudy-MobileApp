@@ -115,7 +115,7 @@ class SignUpStudentFragment : Fragment() {
                         }
                     }
                 })
-                model.registrate(data)
+                model.register(data)
             }
 
             isValid = true

@@ -13,6 +13,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kz.gaudeamus.instudy.DateSerializer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -37,23 +38,4 @@ data class Card(
 	var created: LocalDate,
 	var status: CardStatus,
 	@ColumnInfo(name = "id")
-	var id: Long? = null) : java.io.Serializable {
-
-	/**
-	 * Сериализатор для перевода даты в текстовый формат ISO и наоборот.
-	 */
-	private object DateSerializer : KSerializer<LocalDate> {
-
-		override fun serialize(encoder: Encoder, value: LocalDate) {
-			val string = value.format(DateTimeFormatter.ISO_LOCAL_DATE)
-			encoder.encodeString(string)
-		}
-
-		override fun deserialize(decoder: Decoder): LocalDate {
-			val string = decoder.decodeString()
-			return LocalDate.parse(string, DateTimeFormatter.ISO_LOCAL_DATE)
-		}
-
-		override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
-	}
-}
+	var id: Long? = null) : java.io.Serializable

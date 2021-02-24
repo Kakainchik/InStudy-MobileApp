@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kz.gaudeamus.instudy.entities.AccountKind
+import kz.gaudeamus.instudy.entities.PropsResponse
 import kz.gaudeamus.instudy.entities.RegistrationSchoolRequest
 import kz.gaudeamus.instudy.models.HttpTask.*
 import kz.gaudeamus.instudy.models.RegistrationSchoolViewModel
@@ -31,7 +32,7 @@ import java.lang.ClassCastException
 
 class SignUpSchoolFragment : Fragment() {
 
-    private val CHOOSE_FILE_REQUESTCODE: Int = 100
+    private val CHOOSE_FILE_REQUEST_CODE: Int = 100
     private val requiredFiles: HashMap<String, Uri> = HashMap()
     private val model: RegistrationSchoolViewModel by activityViewModels()
     private var loginInFragmentListener: OnLoginInFragmentListener? = null
@@ -104,12 +105,12 @@ class SignUpSchoolFragment : Fragment() {
             //Поля заполнены верно - запускаем процесс регистрации
             if(isValid) {
                 //Заполняем массив реквезитами и кодируем в Base64
-                val props = mutableListOf<String>()
-                requiredFiles.forEach { key, value ->
-                    (context?.contentResolver?.openInputStream(value) as? FileInputStream).use {
+                val props = mutableListOf<PropsResponse>()
+                requiredFiles.forEach { name, data ->
+                    (context?.contentResolver?.openInputStream(data) as? FileInputStream).use {
                         val bytes: ByteArray = ByteArray(it!!.available())
                         it.read(bytes)
-                        props.add(Base64.encodeToString(bytes, Base64.NO_WRAP))
+                        props.add(PropsResponse(name, Base64.encodeToString(bytes, Base64.NO_WRAP)))
                     }
                 }
 
@@ -143,7 +144,7 @@ class SignUpSchoolFragment : Fragment() {
                         }
                     }
                 })
-                model.registrate(data)
+                model.register(data)
             }
 
             isValid = true
@@ -152,11 +153,12 @@ class SignUpSchoolFragment : Fragment() {
         //Нажимаем на кнопку добавления файла
         addFileButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                val mimes =
                 setType("application/*")
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CHOOSE_FILE_REQUESTCODE)
+            startActivityForResult(intent, CHOOSE_FILE_REQUEST_CODE)
         }
 
         //Выводим ошибку если сверхлимит длины
@@ -187,7 +189,7 @@ class SignUpSchoolFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
-            CHOOSE_FILE_REQUESTCODE -> { //Выбор файла
+            CHOOSE_FILE_REQUEST_CODE -> { //Выбор файла
                 if(resultCode == RESULT_OK) data?.data?.let { this.importFile(it) }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
@@ -215,7 +217,7 @@ class SignUpSchoolFragment : Fragment() {
         }
 
         //Если такого файла нет - добавляем, иначе - выводим ошибку
-        chipGroup.takeUnless { this.requiredFiles.containsKey(file.name)}
+        chipGroup.takeUnless { this.requiredFiles.containsKey(file.name) }
             ?.run {
                 //Добавляем в общий список
                 this@SignUpSchoolFragment.requiredFiles.put(file.name, uri)

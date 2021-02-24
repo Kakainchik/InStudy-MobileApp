@@ -103,7 +103,9 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         TaskStatus.CANCELED -> {
                             //Операция отменена, разблокируем интерфейс и выводим сообщение
                             this.loginInFragmentListener?.onBlockUI(true)
-                            UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
+                            if(storeData.webStatus == WebStatus.NONE)
+                                Toast.makeText(requireContext(), getString(R.string.error_sign_in_invalid_login_or_pass), Toast.LENGTH_SHORT).show()
+                            else UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
                         }
                     }
                 })

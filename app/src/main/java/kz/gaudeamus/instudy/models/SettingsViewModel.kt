@@ -12,9 +12,9 @@ import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.UpdatePasswordRequest
 import kz.gaudeamus.instudy.models.HttpTask.*
 
-class SettingsViewModel : AndroidViewModel {
+class SettingsViewModel : StandardHttpViewModel {
+	protected override val repository = AuthorizationRepository()
 	private val db: InStudyDB
-	private val repository = AuthorizationRepository()
 	public val logoutLiveData = SingleLiveEvent<HttpTask<Nothing>>()
 	public val updatePassLiveData = SingleLiveEvent<HttpTask<Nothing>>()
 

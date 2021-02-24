@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
@@ -23,16 +22,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
      */
     private val loginCallback: ActivityResultLauncher<Nothing> = registerForActivityResult(LoginActivityContract()) {
         if(it) {
-            currentUser = IOFileHelper.anyAccountOrNull(this)
+            currentAccount = IOFileHelper.anyAccountOrNull(this)
             updateUIByAccount()
         }
     }
 
-    private var currentUser: Account? = null
+    private var currentAccount: Account? = null
     private lateinit var navigationMenu: BottomNavigationView
-    private lateinit var container: FragmentContainerView
     private lateinit var cardFragment: Fragment
     private lateinit var settingsFragment: Fragment
+    private lateinit var queryFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Возвращаем стандартную тему после SplashScreen
@@ -42,7 +41,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         //Визуальные компоненты
         navigationMenu = findViewById(R.id.bottom_navigation)
-        container = findViewById(R.id.main_fragment_container)
 
         //Настраиваем нижнее меню
         navigationMenu.apply {
@@ -51,8 +49,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         //Проверяем наличие аккаунта, если нет - переходим на авторизацию
-        currentUser = IOFileHelper.anyAccountOrNull(this)
-        if(currentUser == null) loginCallback.launch(null)
+        currentAccount = IOFileHelper.anyAccountOrNull(this)
+        if(currentAccount == null) loginCallback.launch(null)
         //Обновляем интерфейс под роль пользователя
         else updateUIByAccount()
     }
@@ -85,6 +83,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 true
             }
             R.id.main_query_menu -> {
+                supportFragmentManager.commit(true) {
+                    addToBackStack("QueryFragment")
+                    setReorderingAllowed(true)
+                    replace(R.id.main_fragment_container, queryFragment)
+                }
                 true
             }
             else -> false
@@ -97,7 +100,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onLogout() {
-        if(IOFileHelper.deleteAccount(this)) loginCallback.launch(null)
+        if(IOFileHelper.deleteAccount(this)) {
+            when(currentAccount?.kind) {
+                //FIXME Не обновляет нижнее меню при перезаходе на другой аккаунт
+                AccountKind.STUDENT -> cardFragment.onDestroy()
+                AccountKind.SCHOOL -> TODO()
+                AccountKind.MODERATOR -> queryFragment.onDestroy()
+            }
+            settingsFragment.onDestroy()
+            loginCallback.launch(null)
+        }
         else Log.w("LOGOUT", "Unexpected error. Couldn't delete account file.")
     }
 
@@ -105,23 +117,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
      * Обновляет пользовательский интерфейс на основе имеющегося аккаунта.
      */
     private fun updateUIByAccount() {
-        when(currentUser?.kind) {
+        navigationMenu.menu.clear()
+        when(currentAccount?.kind) {
             AccountKind.MODERATOR -> {
+                this.settingsFragment = SettingsFragment()
+                this.queryFragment = ModeratorQueryContainerFragment()
                 //Нижнее меню
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.moderator_bottom_navigation_menu)
-                    this.selectedItemId = 0
+                    this@MainActivity.onNavigationItemSelected(this.menu.getItem(0))
                 }
             }
             AccountKind.SCHOOL -> {
+                //Нижнее меню
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.school_bottom_navigation_menu)
-                    this.selectedItemId = 0
+                    this@MainActivity.onNavigationItemSelected(this.menu.getItem(0))
                 }
             }
             AccountKind.STUDENT -> {
                 this.settingsFragment = SettingsFragment()
                 this.cardFragment = StudentCardContainerFragment()
+                //Нижнее меню
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.student_bottom_navigation_menu)
                     this@MainActivity.onNavigationItemSelected(this.menu.getItem(0))

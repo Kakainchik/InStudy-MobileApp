@@ -11,14 +11,14 @@ import kz.gaudeamus.instudy.entities.RegistrationResponse
 import kz.gaudeamus.instudy.entities.RegistrationStudentRequest
 import kz.gaudeamus.instudy.models.HttpTask.*
 
-class RegistrationStudentViewModel(application: Application) : AndroidViewModel(application) {
+class RegistrationStudentViewModel(application: Application) : StandardHttpViewModel(application) {
 	public val signinLiveData = SingleLiveEvent<HttpTask<RegistrationResponse>>()
-	private val regRepository = AuthorizationRepository()
+	protected override val repository = AuthorizationRepository()
 
 	/**
 	 * Регестрирует студента.
 	 */
-	fun registrate(student: RegistrationStudentRequest) {
+	fun register(student: RegistrationStudentRequest) {
 		//Устанавливаем метку как "идущий процесс"
 		signinLiveData.value = HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE)
 
@@ -26,8 +26,8 @@ class RegistrationStudentViewModel(application: Application) : AndroidViewModel(
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()){
 
 			//Получаем результат
-			val result: HttpTask<RegistrationResponse> = regRepository.makeRequest {
-				regRepository.makeRegistrationRequest(student)
+			val result: HttpTask<RegistrationResponse> = repository.makeRequest {
+				repository.makeRegistrationRequest(student)
 			}
 
 			//Устанавливаем значение ресурса ассинхронно

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ProgressBar
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.commit
 import kz.gaudeamus.instudy.UIHelper.makeEnableUI

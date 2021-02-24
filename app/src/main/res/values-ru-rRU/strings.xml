@@ -63,4 +63,23 @@
     <string name="title_old_password">Старый пароль</string>
     <string name="title_new_password">Новый пароль</string>
     <string name="notice_password_updated">Пароль успешно обновлён!</string>
+    <string name="error_settings_invalid_password">Ошибка: Неверный пароль.</string>
+    <string name="error_sign_in_invalid_login_or_pass">Ошибка: Неверный логин или пароль.</string>
+    <string name="title_contact_information">Контактные данные</string>
+    <string name="title_query_organization">Организация: %1$s</string>
+    <string name="notice_query_verified">Регистрация прошла проверку успешно!</string>
+    <string name="title_query_information">Данные о запросе на регистрацию</string>
+    <string name="title_query_created">Создан: %1$s</string>
+    <string name="title_query_props">Сертификаты</string>
+    <string name="intent_open_with">Открыть с помощью...</string>
+    <string name="bt_verify">Принять</string>
+    <string name="bt_deny">Отклонить</string>
+    <string name="title_attention">Внимание!</string>
+    <string name="alert_sure_verify_query_text">Вы уверены, что хотите подтвердить этот запрос на регистрацию?</string>
+    <string name="bt_cancel">Отмена</string>
+    <string name="error_cannot_verify_query">Не удаётся подтвердить регистрацию либо она была уже подтверждена</string>
+    <string name="alert_deny_comment">Причина отказа(необязательно)</string>
+    <string name="alert_sure_deny_query_text">Вы уверены, что хотите отказать в регистрации?</string>
+    <string name="error_cannot_deny_query">Не удаётся отклонить запрос на регистрицию или запрос был уже отклонён.</string>
+    <string name="notice_query_denied">Запрос на регистрацию успешно отклонён!</string>
 </resources>
