@@ -48,12 +48,9 @@ class LoginInActivity : AppCompatActivity(), OnLoginInFragmentListener {
         progressBar = findViewById(R.id.progressbar)
         container = findViewById(R.id.loginin_fragment_container)
 
-        //Если нет аккаунта
-        if(savedInstanceState == null) {
-            //Переходим на фрагмент авторизации
-            supportFragmentManager.commit {
-                replace(R.id.loginin_fragment_container, signInFragment)
-            }
+        //Сразу ереходим на фрагмент авторизации
+        supportFragmentManager.commit {
+            replace(R.id.loginin_fragment_container, signInFragment)
         }
     }
 
@@ -92,7 +89,8 @@ class LoginInActivity : AppCompatActivity(), OnLoginInFragmentListener {
      * Блокирует пользовательский интерфейс и показывает анимацию загрузки.
      */
     override fun onBlockUI(enable: Boolean) {
-        progressBar.visibility = if(enable) View.GONE else View.VISIBLE
+        if(enable) progressBar.hide()
+        else progressBar.show()
         makeEnableUI(enable, container)
     }
 

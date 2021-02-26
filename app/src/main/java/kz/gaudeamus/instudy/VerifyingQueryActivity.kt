@@ -202,6 +202,7 @@ class VerifyingQueryActivity : AppCompatActivity(), DenyQueryDialogFragment.Deni
 			}
 		})
 
+		//Отменяем регистрацию
 		queryModel.denyQuery(currentAccount, bundle.id, comment)
 	}
 

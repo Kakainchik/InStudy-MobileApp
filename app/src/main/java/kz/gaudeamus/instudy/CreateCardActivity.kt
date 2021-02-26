@@ -83,7 +83,7 @@ class CreateCardActivity : AppCompatActivity() {
 			//Наблюдаем за процессом работы
 			cardModel.localAddedCard.observe(this, { storeData ->
 				if(storeData != null) {
-					card.guid = storeData
+					card.cardId = storeData
 					setResult(RESULT_OK, Intent().putExtra(NAME_EXTRA, card))
 					this.finish()
 				} else {
@@ -102,7 +102,7 @@ class CreateCardActivity : AppCompatActivity() {
 
 			if(bundle != null) {
 				//Обновляем имеющуюся
-				val card = Card(guid = bundle.guid,
+				val card = Card(cardId = bundle.cardId,
 								title = titleText.text.toString().trim(),
 								content = contentText.text.toString().trim(),
 								city = cityAutoText.text.toString().trim(),
@@ -145,7 +145,7 @@ class CreateCardActivity : AppCompatActivity() {
 				//Наблюдаем за процессом работы локального добавления
 				cardModel.localAddedCard.observe(this, { storeData ->
 					if(storeData != null) {
-						card.guid = storeData
+						card.cardId = storeData
 						setResult(RESULT_OK, Intent().putExtra(NAME_EXTRA, card))
 						this.finish()
 					} else {

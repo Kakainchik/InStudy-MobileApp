@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:paddingTop="@dimen/vertical_padding_card"
+            android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+        <TextView
+                android:id="@+id/card_item_title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Title"
+                android:textSize="@dimen/title_text_size"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/card_item_content_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_item_title_text"
+                android:layout_marginTop="@dimen/vertical_margin_card"
+                android:text="Content"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        <TextView
+                android:id="@+id/card_item_date_created_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_item_content_text"
+                android:layout_marginTop="@dimen/vertical_margin_card"
+                android:text="01.01.1970"/>
+
+        <TextView
+                android:id="@+id/card_item_city_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/card_item_date_created_text"
+                android:text="New-York"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        <View
+                style="@style/Divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -82,4 +82,7 @@
     <string name="alert_sure_deny_query_text">Вы уверены, что хотите отказать в регистрации?</string>
     <string name="error_cannot_deny_query">Не удаётся отклонить запрос на регистрицию или запрос был уже отклонён.</string>
     <string name="notice_query_denied">Запрос на регистрацию успешно отклонён!</string>
+    <string name="notice_school_no_card">Мы не смогли найти никаких карточек для вас. Попробуйте отфильтровать ваш поиск.</string>
+    <string name="menu_filter_card">Фильтр</string>
+    <string name="menu_search_card">Поиск</string>
 </resources>

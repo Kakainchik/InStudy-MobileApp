@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private var currentAccount: Account? = null
     private lateinit var navigationMenu: BottomNavigationView
-    private lateinit var cardFragment: Fragment
+    private lateinit var studentCardFragment: Fragment
+    private lateinit var schoolCardFragment: Fragment
     private lateinit var settingsFragment: Fragment
     private lateinit var queryFragment: Fragment
 
@@ -61,11 +62,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             //Нажата вкладка карточек
-            R.id.main_card_menu -> {
+            R.id.main_student_card_menu -> {
                 supportFragmentManager.commit(true) {
                     addToBackStack("StudentCardContainerFragment")
                     setReorderingAllowed(true)
-                    replace(R.id.main_fragment_container, cardFragment)
+                    replace(R.id.main_fragment_container, studentCardFragment)
+                }
+                true
+            }
+            R.id.main_school_card_menu -> {
+                supportFragmentManager.commit(true) {
+                    addToBackStack("SchoolCardContainerFragment")
+                    setReorderingAllowed(true)
+                    replace(R.id.main_fragment_container, schoolCardFragment)
                 }
                 true
             }
@@ -82,6 +91,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 }
                 true
             }
+            //Нажата вкладка запросов регистрации
             R.id.main_query_menu -> {
                 supportFragmentManager.commit(true) {
                     addToBackStack("QueryFragment")
@@ -102,9 +112,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onLogout() {
         if(IOFileHelper.deleteAccount(this)) {
             when(currentAccount?.kind) {
-                //FIXME Не обновляет нижнее меню при перезаходе на другой аккаунт
-                AccountKind.STUDENT -> cardFragment.onDestroy()
-                AccountKind.SCHOOL -> TODO()
+                AccountKind.STUDENT -> studentCardFragment.onDestroy()
+                AccountKind.SCHOOL -> schoolCardFragment.onDestroy()
                 AccountKind.MODERATOR -> queryFragment.onDestroy()
             }
             settingsFragment.onDestroy()
@@ -129,6 +138,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 }
             }
             AccountKind.SCHOOL -> {
+                this.settingsFragment = SettingsFragment()
+                this.schoolCardFragment = SchoolCardContainerFragment.newInstance(currentAccount!!)
                 //Нижнее меню
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.school_bottom_navigation_menu)
@@ -137,7 +148,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             AccountKind.STUDENT -> {
                 this.settingsFragment = SettingsFragment()
-                this.cardFragment = StudentCardContainerFragment()
+                this.studentCardFragment = StudentCardContainerFragment()
                 //Нижнее меню
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.student_bottom_navigation_menu)

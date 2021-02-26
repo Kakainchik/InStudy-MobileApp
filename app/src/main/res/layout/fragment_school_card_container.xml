@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/student_card_container"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".StudentCardContainerFragment">
+        tools:context=".SchoolCardContainerFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/main_appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/main_appbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/app_name"
                 app:titleTextColor="@color/colorTextBoxBackground"
-                app:menu="@menu/student_card_appbar_menu"/>
+                app:menu="@menu/school_card_appbar_menu"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <androidx.constraintlayout.utils.widget.ImageFilterButton
+                        android:id="@+id/appbar_back_button"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/ic_sharp_arrow_back_24"
+                        android:backgroundTint="#000000FF"
+                        android:visibility="invisible"/>
+
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:layout_toEndOf="@id/appbar_back_button"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:maxLines="1"/>
+
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -53,7 +79,7 @@
                 android:gravity="center"
                 android:textStyle="italic"
                 android:textSize="18sp"
-                android:text="@string/notice_no_card"/>
+                android:text="@string/notice_school_no_card"/>
 
     </LinearLayout>
 

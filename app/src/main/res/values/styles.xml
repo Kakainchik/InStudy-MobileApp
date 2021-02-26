@@ -54,7 +54,7 @@
         <item name="maxLines">1</item>
         <item name="android:inputType">textAutoComplete</item>
         <item name="backgroundTint">@android:color/transparent</item>
-        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingHorizontal">10dp</item>F
         <item name="android:gravity">center_vertical</item>
     </style>
 

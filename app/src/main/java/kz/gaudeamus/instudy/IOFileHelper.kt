@@ -22,13 +22,9 @@ object IOFileHelper {
 	 */
 	public fun anyAccountOrNull(context: Context): Account? {
 		val file = File(context.dataDir, ACCOUNT_FILE_NAME)
-
 		return try {
-			val fin = context.openFileInput(ACCOUNT_FILE_NAME)
 			//Читаем данные с файла
-			val json = fin.use {
-				it.readBytes().toString(Charset.defaultCharset())
-			}
+			val json = file.readText(Charset.defaultCharset())
 			Json.decodeFromString<Account>(json)
 		} catch(ex: Exception) {
 			/*Если конвертация с JSON в Account не удалась или не удаётся прочесть файл
@@ -45,10 +41,7 @@ object IOFileHelper {
 		val file = File(context.dataDir, ACCOUNT_FILE_NAME)
 
 		return try {
-
-			context.openFileOutput(file.name, Context.MODE_PRIVATE).use {
-				it.write(Json.encodeToString(account).toByteArray())
-			}
+			file.writeBytes(Json.encodeToString(account).toByteArray())
 			true
 		} catch(ex: Exception) {
 			false

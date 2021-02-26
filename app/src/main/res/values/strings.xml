@@ -86,6 +86,7 @@
     <string name="alert_sure_deny_query_text">Are you sure to deny this query?</string>
     <string name="error_cannot_deny_query">Unable deny query or this one already has been denied.</string>
     <string name="notice_query_denied">Registration denied succesfully!</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="notice_school_no_card">We could not find any cards for you. Try filter your search.</string>
+    <string name="menu_filter_card">Filter</string>
+    <string name="menu_search_card">Search</string>
 </resources>

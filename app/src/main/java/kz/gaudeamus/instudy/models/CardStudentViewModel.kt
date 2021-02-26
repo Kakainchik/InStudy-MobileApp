@@ -117,7 +117,7 @@ class CardStudentViewModel : StandardHttpViewModel {
 	 * Обновляет определённую карточку локально. Использует [localUpdatedCard].
 	 */
 	fun updateToDB(card: Card): Unit {
-		viewModelScope.launch {
+		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
 			try {
 				dao.update(card)
 				localUpdatedCard.postValue(true)

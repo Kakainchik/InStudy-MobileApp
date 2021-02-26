@@ -36,7 +36,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 	 */
 	private val cardUpdateCallback: ActivityResultLauncher<Card?> = registerForActivityResult(AddCardActivityContract()) {
 		it?.let { new ->
-			val index = cards.indexOfFirst { old -> old.guid == new.guid }
+			val index = cards.indexOfFirst { old -> old.cardId == new.cardId }
 			cards[index] = new
 			cardAdapter.notifyItemChanged(pickedCardIndex)
 		}
@@ -150,21 +150,32 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 					progressBar.hide()
 				}
 				TaskStatus.CANCELED -> {
-					//При устаревшем токене - пробуем обновить его и отправить запрос заново
-					if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
-						cardModel.throughRefreshToken(requireContext(), currentAccount!!) { newAccount ->
-							cardModel.getOwnFromServerAndMergeWithDB(newAccount)
+					when(storeData.webStatus) {
+						//При устаревшем токене - пробуем обновить его и отправить запрос заново
+						WebStatus.UNAUTHORIZED -> {
+							cardModel.throughRefreshToken(requireContext(), currentAccount!!) { newAccount ->
+								cardModel.getOwnFromServerAndMergeWithDB(newAccount)
+							}
 						}
-					} else {
-						UIHelper.makeEnableUI(true, container!!)
-						progressBar.hide()
+						WebStatus.TIMEOUT, WebStatus.UNABLE_CONNECT -> {
+							UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
+							/*Если не удаётся сразу подключиться к серверу - просто подгружаем
+							имеющиеся из локальной базы*/
+							cardModel.getAllFromDB()
+							UIHelper.makeEnableUI(true, container!!)
+							progressBar.hide()
+						}
+						else -> {
+							UIHelper.makeEnableUI(true, container!!)
+							progressBar.hide()
+						}
 					}
 				}
 			}
 		})
 
-		//Запускаем работу на получение карточек с локальной базы
-		cardModel.getAllFromDB()
+		//Запускаем работу на получение карточек с сервера
+		cardModel.getOwnFromServerAndMergeWithDB(currentAccount!!)
 
 		return view
 	}

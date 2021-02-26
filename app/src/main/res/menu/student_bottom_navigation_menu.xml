@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/main_card_menu"
+    <item android:id="@+id/main_student_card_menu"
             android:title="@string/menu_card"
             android:enabled="true"
             android:icon="@drawable/ic_sharp_local_offer_24"/>

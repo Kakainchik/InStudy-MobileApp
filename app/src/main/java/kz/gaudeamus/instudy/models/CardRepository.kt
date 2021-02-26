@@ -12,6 +12,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kz.gaudeamus.instudy.entities.AddCardRequest
 import kz.gaudeamus.instudy.entities.CardResponse
+import kz.gaudeamus.instudy.entities.FilteredCardResponse
 import kz.gaudeamus.instudy.models.HttpTask.*
 
 final class CardRepository : KtorRepository() {
@@ -108,9 +109,42 @@ final class CardRepository : KtorRepository() {
 		}
 	}
 
+	/**
+	 * Ассинхронно делает запрос на получение карточек по фильтру. E.g.: Актуально для школ.
+	 */
+	suspend fun makeGetAllCardByFilterRequest(activeToken: String): HttpTask<Array<FilteredCardResponse>> {
+		return withContext(Dispatchers.IO) {
+			val httpClient = initClient()
+			val response = httpClient.use {
+				it.get<HttpResponse>(GET_CARDS_BY_FILTER) {
+					timeout {
+						requestTimeoutMillis = LONG_TIMEOUT
+						socketTimeoutMillis = LONG_TIMEOUT
+					}
+
+					header(AUTHORIZATION_HEADER, activeToken)
+				}
+			}
+
+			//Получаем ответ
+			when(response.status) {
+				HttpStatusCode.OK -> {
+					val body = Json {
+						coerceInputValues = true
+					}.decodeFromString<Array<FilteredCardResponse>>(response.readText())
+					HttpTask(TaskStatus.COMPLETED, body, WebStatus.NONE)
+				}
+				HttpStatusCode.NotFound -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+				HttpStatusCode.Unauthorized -> HttpTask(TaskStatus.CANCELED, null, WebStatus.UNAUTHORIZED)
+				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+			}
+		}
+	}
+
 	companion object {
 		internal const val ADD_CARD_URL = "$HOSTNAME/card/add"
 		internal const val GET_OWN_CARDS_URL = "$HOSTNAME/card"
 		internal const val DELETE_OWN_CARD_URL = "$HOSTNAME/card"
+		internal const val GET_CARDS_BY_FILTER = "$HOSTNAME/card/filter"
 	}
 }

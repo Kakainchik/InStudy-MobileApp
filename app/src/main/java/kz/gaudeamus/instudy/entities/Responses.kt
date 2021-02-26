@@ -49,3 +49,19 @@ data class CardResponse(val id: Long,
 @Serializable
 data class PropsResponse(val name: String,
 						 val data: String)
+
+@Serializable
+data class FilteredCardResponse(val id: Long,
+								val title: String,
+								val content: String,
+								val soughtCity: String,
+								val faculty: String,
+								val speciality: String,
+								val created: String,
+								val student: Student) {
+	@Serializable
+	data class Student(val email: String,
+					   val phone: String,
+					   val name: String,
+					   val surname: String?)
+}
