@@ -64,3 +64,11 @@ data class AuthorizationRequest(val email: String,
 @Serializable
 data class UpdatePasswordRequest(val oldPassword: String,
 								 val newPassword: String)
+
+@Serializable
+data class UpdateSchoolRequest(val organization: String?)
+
+@Serializable
+data class UpdateStudentRequest(val phone: String?,
+								val name: String?,
+								val surname: String?)

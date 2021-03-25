@@ -12,4 +12,24 @@
             android:title="@string/menu_filter_card"
             android:icon="@drawable/ic_sharp_filter_alt_24"
             app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/appbar_sort_card"
+            android:enabled="true"
+            android:title="@string/menu_sort_card"
+            android:icon="@drawable/ic_sharp_sort_24"
+            app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/appbar_filterby_title"
+                        android:title="@string/menu_filterby_title"
+                        android:checked="true"/>
+
+                <item android:id="@+id/appbar_filterby_city"
+                        android:title="@string/menu_filterby_city"/>
+
+                <item android:id="@+id/appbar_filterby_date"
+                        android:title="@string/menu_filterby_date"/>
+            </group>
+        </menu>
+    </item>
 </menu>

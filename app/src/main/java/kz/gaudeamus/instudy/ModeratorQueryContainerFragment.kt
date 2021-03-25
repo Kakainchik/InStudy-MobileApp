@@ -37,6 +37,7 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 	private lateinit var currentAccount: Account
 
 	private var pickedQueryIndex: Int = 0
+	private var isFirstLoad: Boolean = true
 
 	/**
 	 * Обработчик события на подтверждение регистрации школы из [VerifyingQueryActivity]
@@ -71,6 +72,11 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 		queryModel.receivedLiveData.observe(this, { storeData ->
 			when(storeData.taskStatus) {
 				TaskStatus.PROCESSING -> {
+					//Если это первый(автоматический) запуск - не блокируем UI
+					if(isFirstLoad) {
+						isFirstLoad = false
+						return@observe
+					}
 					UIHelper.makeEnableUI(false, container!!)
 					progressBar.show()
 				}

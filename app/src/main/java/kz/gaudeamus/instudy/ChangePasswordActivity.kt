@@ -3,6 +3,7 @@ package kz.gaudeamus.instudy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +28,7 @@ class ChangePasswordActivity : AppCompatActivity() {
 	private lateinit var confirmPasswordLayout: TextInputLayout
 	private lateinit var confirmPasswordText: TextInputEditText
 	private lateinit var updatePasswordButton: MaterialButton
-	private lateinit var container: ConstraintLayout
+	private lateinit var container: ScrollView
 	private lateinit var progressBar: ContentLoadingProgressBar
 
 	override fun onCreate(savedInstanceState: Bundle?) {

@@ -7,13 +7,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kz.gaudeamus.instudy.SingleLiveEvent
-import kz.gaudeamus.instudy.entities.AuthenticationResponse
-import kz.gaudeamus.instudy.entities.AuthorizationRequest
+import kz.gaudeamus.instudy.entities.*
 import kz.gaudeamus.instudy.models.HttpTask.*
 
-class AuthorizationViewModel(application: Application) : AndroidViewModel(application) {
+class AuthorizationViewModel(application: Application) : StandardHttpViewModel(application) {
+	protected override val repository = AuthorizationRepository()
 	public val signinLiveData = SingleLiveEvent<HttpTask<AuthenticationResponse>>()
-	private val regRepository = AuthorizationRepository()
+	public val receivedPersonalInformation = SingleLiveEvent<InformationResponse?>()
 
 	/**
 	 * Авторизирует пользователя.
@@ -26,12 +26,27 @@ class AuthorizationViewModel(application: Application) : AndroidViewModel(applic
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()){
 
 			//Получаем результат
-			val result: HttpTask<AuthenticationResponse> = regRepository.makeRequest {
-				regRepository.makeAuthorizationRequest(user)
+			val result: HttpTask<AuthenticationResponse> = repository.makeRequest {
+				repository.makeAuthorizationRequest(user)
 			}
 
 			//Устанавливаем значение ресурса ассинхронно
 			signinLiveData.postValue(result)
+		}
+	}
+
+	fun receivePersonalInformation(user: Account) {
+		//Устанавливаем метку как "идущий процесс"
+		receivedPersonalInformation.value = null
+
+		//Запускаем процесс
+		viewModelScope.launch(Dispatchers.Main + SupervisorJob()){
+
+			//Получаем результат
+			val result = repository.makeGetPersonalInformationRequest(user.token, user.kind)
+
+			//Устанавливаем значение ресурса ассинхронно
+			receivedPersonalInformation.postValue(result)
 		}
 	}
 }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.Card
-import kz.gaudeamus.instudy.models.CardAdapter
+import kz.gaudeamus.instudy.models.CardStudentAdapter
 import kz.gaudeamus.instudy.models.CardStudentViewModel
 import kz.gaudeamus.instudy.models.HttpTask.*
 
@@ -44,20 +44,19 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 
 	private val cards = mutableListOf<Card>()
 	private val cardModel: CardStudentViewModel by activityViewModels()
-	private val cardAdapter: CardAdapter = CardAdapter(cards)
+	private val cardAdapter: CardStudentAdapter = CardStudentAdapter(cards)
 
 	private lateinit var notificationLayer: LinearLayout
 	private lateinit var progressBar: ContentLoadingProgressBar
 	private lateinit var cardList: RecyclerView
+	private lateinit var currentAccount: Account
 
 	private var actionMode: ActionMode? = null
 	private var pickedCardIndex: Int = 0
-	private var currentAccount: Account? = null
+	private var isFirstLoad: Boolean = true
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-
-		currentAccount = IOFileHelper.anyAccountOrNull(requireContext())!!
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,6 +68,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 		notificationLayer = view.findViewById(R.id.no_card_image)
 		progressBar = view.findViewById(R.id.progressbar)
 
+		currentAccount = IOFileHelper.anyAccountOrNull(requireContext())!!
 		cardList.adapter = cardAdapter
 		appBar.setOnMenuItemClickListener(this)
 
@@ -110,7 +110,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 					TaskStatus.CANCELED -> {
 						//При устаревшем токене - пробуем обновить его и отправить запрос заново
 						if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
-							cardModel.throughRefreshToken(requireContext(), currentAccount!!) { newAccount ->
+							cardModel.throughRefreshToken(requireContext(), currentAccount) { newAccount ->
 								cardModel.delete(newAccount, *list.toTypedArray())
 							}
 						} else {
@@ -121,7 +121,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 				}
 			})
 
-			cardModel.delete(currentAccount!!, *list.toTypedArray())
+			cardModel.delete(currentAccount, *list.toTypedArray())
 		}
 
 
@@ -141,6 +141,11 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 		cardModel.receivedLiveData.observe(this.viewLifecycleOwner, { storeData ->
 			when(storeData.taskStatus) {
 				TaskStatus.PROCESSING -> {
+					//Если это первый(автоматический) запуск - не блокируем UI
+					if(isFirstLoad) {
+						isFirstLoad = false
+						return@observe
+					}
 					UIHelper.makeEnableUI(false, container!!)
 					progressBar.show()
 				}
@@ -153,7 +158,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 					when(storeData.webStatus) {
 						//При устаревшем токене - пробуем обновить его и отправить запрос заново
 						WebStatus.UNAUTHORIZED -> {
-							cardModel.throughRefreshToken(requireContext(), currentAccount!!) { newAccount ->
+							cardModel.throughRefreshToken(requireContext(), currentAccount) { newAccount ->
 								cardModel.getOwnFromServerAndMergeWithDB(newAccount)
 							}
 						}
@@ -174,8 +179,9 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 			}
 		})
 
-		//Запускаем работу на получение карточек с сервера
-		cardModel.getOwnFromServerAndMergeWithDB(currentAccount!!)
+		//Запускаем работу на получение карточек
+		cardModel.getAllFromDB()
+		cardModel.getOwnFromServerAndMergeWithDB(currentAccount)
 
 		return view
 	}
@@ -192,7 +198,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 			}
 			//Получаем все имеющиеся локальные карточки
 			R.id.appbar_refresh_card -> {
-				cardModel.getOwnFromServerAndMergeWithDB(currentAccount!!)
+				cardModel.getOwnFromServerAndMergeWithDB(currentAccount)
 				true
 			}
 			else -> false

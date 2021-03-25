@@ -13,6 +13,8 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
+        <item name="switchStyle">@style/Widget.App.Switch</item>
     </style>
 
     <style name="AppTheme.Launcher">
@@ -69,6 +71,22 @@
         <item name="android:textAlignment">viewStart</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="rippleColor">?attr/colorControlHighlight</item>
+    </style>
+
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CheckBox</item>
+    </style>
+
+    <style name="ThemeOverlay.App.CheckBox" parent="">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="Widget.App.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 
 </resources>

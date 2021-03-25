@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             AccountKind.SCHOOL -> {
                 this.settingsFragment = SettingsFragment()
-                this.schoolCardFragment = SchoolCardContainerFragment.newInstance(currentAccount!!)
+                this.schoolCardFragment = SchoolCardContainerFragment()
                 //Нижнее меню
                 navigationMenu.apply {
                     this.inflateMenu(R.menu.school_bottom_navigation_menu)

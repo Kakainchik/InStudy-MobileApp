@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter
 /**
  * Адаптер для списка карточек студента.
  */
-class CardAdapter(private val dataSet: List<Card>) :
-	RecyclerView.Adapter<CardAdapter.ViewHolder>(), ActionMode.Callback {
+class CardStudentAdapter(private val dataSet: List<Card>) :
+	RecyclerView.Adapter<CardStudentAdapter.ViewHolder>(), ActionMode.Callback {
 	public class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		val titleText: TextView
 		val contentText: TextView

@@ -17,7 +17,21 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".ShowCardActivity"></activity>
+        <activity
+                android:name=".ChangeStudentContactActivity"
+                android:label="@string/label_change_contacts"
+                android:windowSoftInputMode="adjustResize"/>
+        <activity
+                android:name=".ChangeSchoolContactActivity"
+                android:label="@string/label_change_contacts"
+                android:windowSoftInputMode="adjustResize"/>
+        <activity
+                android:name=".ChangePasswordActivity"
+                android:label="@string/label_change_password"
+                android:windowSoftInputMode="adjustResize"/>
+        <activity
+                android:name=".ShowCardActivity"
+                android:theme="@style/AppTheme.NoActionBar"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -29,12 +43,16 @@
                     android:resource="@xml/provider_paths"/>
         </provider>
 
-        <activity android:name=".VerifyingQueryActivity"/>
-        <activity android:name=".ChangePasswordActivity"/>
-        <activity android:name=".CreateCardActivity"/>
+        <activity
+                android:name=".VerifyingQueryActivity"
+                android:windowSoftInputMode="adjustResize"/>
+        <activity
+                android:name=".CreateCardActivity"
+                android:windowSoftInputMode="adjustResize"/>
         <activity
                 android:name=".LoginInActivity"
-                android:theme="@style/AppTheme.NoActionBar"/>
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize"/>
         <activity
                 android:name=".MainActivity"
                 android:theme="@style/AppTheme.Launcher">

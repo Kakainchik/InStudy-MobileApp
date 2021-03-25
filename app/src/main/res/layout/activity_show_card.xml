@@ -1,9 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:overScrollMode="never"
         tools:context=".ShowCardActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/show_card_appbar_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/show_card_appbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:title="Name"
+                    app:titleTextColor="@color/colorTextBoxBackground"
+                    app:subtitle="@string/title_card_created"
+                    app:subtitleTextColor="@color/colorTextBoxBackground"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/show_card_data_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/show_card_appbar_layout"
+                android:layout_margin="20dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="4dp">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/vertical_padding_card"
+                    android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_card_information"
+                        android:fontFamily="sans-serif-black"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_title_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_from_title_show_card"
+                        android:layout_marginBottom="@dimen/vertical_margin_show_card_title"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:text="Title"/>
+
+                <View style="@style/Divider"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_comment_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="90dp"
+                        android:minLines="1"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="Comment"/>
+
+                <View
+                        android:id="@+id/comment_divider"
+                        style="@style/Divider"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_city_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="@string/title_showcard_city"/>
+
+                <View style="@style/Divider"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_speciality_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="@string/title_showcard_speciality"/>
+
+                <View style="@style/Divider"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_faculty_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="@string/title_showcard_faculty"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/show_card_contact_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/show_card_data_card"
+                android:layout_margin="20dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="4dp">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/vertical_padding_card"
+                    android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_contact_information"
+                        android:fontFamily="sans-serif-black"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_fullname_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="@string/title_showcard_fullname"/>
+
+
+                <View style="@style/Divider"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_phone_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="@string/title_showcard_phone"
+                        android:autoLink="phone"
+                        android:linksClickable="true"/>
+
+                <View style="@style/Divider"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/show_card_email_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/start_padding_show_card_title"
+                        android:layout_marginVertical="@dimen/vertical_margin_show_card_title"
+                        android:text="@string/title_showcard_email"
+                        android:autoLink="email"
+                        android:linksClickable="true"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- TODO: Кнопка "Написать в чат" -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

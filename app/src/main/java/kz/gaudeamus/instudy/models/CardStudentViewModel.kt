@@ -1,14 +1,13 @@
 package kz.gaudeamus.instudy.models
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kz.gaudeamus.instudy.SingleLiveEvent
-import kz.gaudeamus.instudy.database.CardDAO
+import kz.gaudeamus.instudy.database.StudentCardDAO
 import kz.gaudeamus.instudy.database.InStudyDB
 import kz.gaudeamus.instudy.database.InStudyDB.Companion.DATABASE_NAME
 import kz.gaudeamus.instudy.entities.*
@@ -19,7 +18,7 @@ import java.time.format.DateTimeFormatter
 
 class CardStudentViewModel : StandardHttpViewModel {
 	private val db: InStudyDB
-	private val dao: CardDAO
+	private val dao: StudentCardDAO
 	protected override val repository = CardRepository()
 
 	public val localAddedCard = SingleLiveEvent<Long?>()
@@ -45,11 +44,28 @@ class CardStudentViewModel : StandardHttpViewModel {
 		super.onCleared()
 	}
 
+	/**
+	 * Отправляет карточку на сервер.
+	 */
 	fun sendToServer(card: AddCardRequest, currentAccount: Account) {
 		sendLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
 			val result: HttpTask<CardResponse> = repository.makeRequest {
 				repository.makeAddCardRequest(card, currentAccount.token)
+			}
+
+			sendLiveData.postValue(result)
+		}
+	}
+
+	/**
+	 * Отправляет обновлённую карточку на сервер.
+	 */
+	fun updateToServer(card: UpdateCardRequest, currentAccount: Account) {
+		sendLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
+		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
+			val result: HttpTask<CardResponse> = repository.makeRequest {
+				repository.makeUpdateCardRequest(card, currentAccount.token)
 			}
 
 			sendLiveData.postValue(result)

@@ -13,6 +13,11 @@
     <dimen name="horizontal_margin_card">20dp</dimen>
     <dimen name="vertical_margin_card">7dp</dimen>
     <dimen name="top_margin_settings">11dp</dimen>
+    <dimen name="start_padding_show_card_title">5dp</dimen>
+    <dimen name="margin_from_title_show_card">4dp</dimen>
+    <dimen name="vertical_margin_show_card_title">7dp</dimen>
+    <dimen name="vertical_margin_dialog_text">13dp</dimen>
+    <dimen name="start_padding_change_contact_card">6dp</dimen>
 
     <!-- Размеры -->
     <dimen name="size_icon_login_in">25dp</dimen>

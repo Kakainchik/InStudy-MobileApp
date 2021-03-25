@@ -1,6 +1,8 @@
 package kz.gaudeamus.instudy
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +17,7 @@ import com.google.android.material.button.MaterialButton
 import kz.gaudeamus.instudy.entities.AddCardRequest
 import kz.gaudeamus.instudy.entities.Card
 import kz.gaudeamus.instudy.entities.CardStatus
+import kz.gaudeamus.instudy.entities.UpdateCardRequest
 import kz.gaudeamus.instudy.models.CardStudentViewModel
 import kz.gaudeamus.instudy.models.HttpTask.*
 import java.time.LocalDate
@@ -33,6 +36,7 @@ class CreateCardActivity : AppCompatActivity() {
 	private lateinit var specialitiesAutoText: AutoCompleteTextView
 	private lateinit var progressBar: ContentLoadingProgressBar
 	private lateinit var container: ConstraintLayout
+	private lateinit var settings: SharedPreferences
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -49,13 +53,24 @@ class CreateCardActivity : AppCompatActivity() {
 		progressBar = findViewById(R.id.progressbar)
 		container = findViewById(R.id.create_card_container)
 
+		settings = getSharedPreferences("PERSONAL_DATA_KEY", Context.MODE_PRIVATE)
+		val account = IOFileHelper.anyAccountOrNull(this)!!
 		val bundle = intent.getSerializableExtra(NAME_EXTRA) as? Card
 		//Заполняем поля, если редактируем карточку, а не создаём новую
 		bundle?.apply {
+			draftButton.visibility = View.GONE
+			if(status == CardStatus.EXPIRED) {
+				createButton.visibility = View.GONE
+				titleText.isEnabled = false
+				contentText.isEnabled = false
+				cityAutoText.isEnabled = false
+				facultiesAutoText.isEnabled = false
+				specialitiesAutoText.isEnabled = false
+			}
+
 			titleText.setText(title)
 			contentText.setText(content)
 			createButton.text = getString(R.string.bt_save)
-			draftButton.visibility = View.GONE
 			cityAutoText.setText(city)
 			facultiesAutoText.setText(faculty)
 			specialitiesAutoText.setText(speciality)
@@ -66,6 +81,7 @@ class CreateCardActivity : AppCompatActivity() {
 															R.array.cities,
 															android.R.layout.simple_spinner_item))
 			if(bundle == null) this.adapter.getItem(0) as String
+			if(settings.contains("DEFAULT_CITY")) this.setText(settings.getString("DEFAULT_CITY", null))
 		}
 
 		//Обработчик нажатия на кнопку сохранения карточки в черновик
@@ -112,7 +128,7 @@ class CreateCardActivity : AppCompatActivity() {
 								status = bundle.status,
 								id = bundle.id)
 
-				//Наблюдаем за процессом работы
+				//Наблюдаем за процессом работы локального обновления
 				cardModel.localUpdatedCard.observe(this, { storeData ->
 					if(storeData) {
 						setResult(RESULT_OK, Intent().putExtra(NAME_EXTRA, card))
@@ -123,8 +139,54 @@ class CreateCardActivity : AppCompatActivity() {
 					}
 				})
 
-				//TODO отправить обновлённую карточку на сервер
-				cardModel.updateToDB(card)
+				//Отправляем обновлённую карточку на сервер, если статус активные, иначе в черновик
+				if(bundle.status == CardStatus.DRAFT) cardModel.updateToDB(card)
+				else {
+					val requestData = UpdateCardRequest(id = card.id!!,
+														title = card.title,
+														content = card.content,
+														soughtCity = card.city,
+														faculty = card.faculty,
+														speciality = card.speciality)
+
+					//Наблюдаем за отправлением карточки на сервер
+					cardModel.sendLiveData.observe(this, { storeData ->
+						when(storeData.taskStatus) {
+							TaskStatus.PROCESSING -> {
+								progressBar.show()
+								UIHelper.makeEnableUI(false, container)
+							}
+							//Если отправка на сервер прошла успешно
+							TaskStatus.COMPLETED -> {
+								progressBar.hide()
+								UIHelper.makeEnableUI(true, container)
+
+								//Обновляем id полученной карты и создаём её локально
+								storeData.data?.apply {
+									card.status = if(this.isValid) CardStatus.ACTIVE else CardStatus.EXPIRED
+									cardModel.updateToDB(card)
+								} ?:run {
+									card.status = CardStatus.EXPIRED
+									cardModel.updateToDB(card)
+								}
+							}
+							TaskStatus.CANCELED -> {
+								//При устаревшем токене - пробуем обновить его и отправить запрос заново
+								if(storeData.webStatus == WebStatus.UNAUTHORIZED) {
+									cardModel.throughRefreshToken(this, account) { newAccount ->
+										cardModel.updateToServer(requestData, newAccount)
+									}
+								} else {
+									progressBar.hide()
+									UIHelper.makeEnableUI(true, container)
+									UIHelper.toastInternetConnectionError(this, storeData.webStatus)
+								}
+							}
+						}
+					})
+
+					cardModel.updateToServer(requestData, account)
+				}
 			} else {
 				//Создаём новую
 				val card = Card(title = titleText.text.toString().trim(),
@@ -140,7 +202,6 @@ class CreateCardActivity : AppCompatActivity() {
 												 soughtCity = card.city,
 												 faculty = card.faculty,
 												 speciality = card.speciality)
-				val account = IOFileHelper.anyAccountOrNull(this)!!
 
 				//Наблюдаем за процессом работы локального добавления
 				cardModel.localAddedCard.observe(this, { storeData ->
@@ -212,11 +273,6 @@ class CreateCardActivity : AppCompatActivity() {
 			titleText.setHintTextColor(errorColor)
 			isValid = false
 		} else titleText.setHintTextColor(hintColor)
-
-		if(contentText.text.isNullOrBlank()) {
-			contentText.setHintTextColor(errorColor)
-			isValid = false
-		} else contentText.setHintTextColor(hintColor)
 
 		if(cityAutoText.text.isNullOrBlank()) {
 			cityAutoText.setHintTextColor(errorColor)

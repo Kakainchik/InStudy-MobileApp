@@ -95,7 +95,7 @@ class QueryRepository : KtorRepository() {
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()
 			val response: HttpResponse = httpClient.use {
-				it.put(DENY_SCHOOL_URL) {
+				it.delete(VERIFY_SCHOOL_URL) {
 					timeout {
 						requestTimeoutMillis = AVERAGE_TIMEOUT
 						socketTimeoutMillis = AVERAGE_TIMEOUT
@@ -104,7 +104,7 @@ class QueryRepository : KtorRepository() {
 					header(AUTHORIZATION_HEADER, activeToken)
 
 					parameter("id", id)
-					parameter("comment", comment)
+					parameter("cause", comment)
 				}
 			}
 
@@ -120,6 +120,5 @@ class QueryRepository : KtorRepository() {
 		internal const val UNVERIFIED_SCHOOLS_URL = "$HOSTNAME/registration"
 		internal const val PROPS_URL = "$UNVERIFIED_SCHOOLS_URL/props"
 		internal const val VERIFY_SCHOOL_URL = "$UNVERIFIED_SCHOOLS_URL/verify-school"
-		internal const val DENY_SCHOOL_URL = "$UNVERIFIED_SCHOOLS_URL/deny-school"
 	}
 }

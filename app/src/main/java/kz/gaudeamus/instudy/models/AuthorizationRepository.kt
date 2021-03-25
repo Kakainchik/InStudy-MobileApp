@@ -10,6 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import kz.gaudeamus.instudy.entities.*
 import kz.gaudeamus.instudy.models.HttpTask.*
 import java.net.URLDecoder
@@ -40,6 +43,33 @@ final class AuthorizationRepository : KtorRepository() {
 			when(response.status) {
 				HttpStatusCode.OK -> HttpTask(TaskStatus.COMPLETED, body, WebStatus.NONE)
 				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+			}
+		}
+	}
+
+	suspend fun makeGetPersonalInformationRequest(token: String, kind: AccountKind) : InformationResponse? {
+		return withContext(Dispatchers.IO) {
+			val httpClient = initClient()
+			val response = httpClient.use {
+				it.get<HttpResponse>(PERSONAL_INFORMATION_URL) {
+
+					timeout {
+						requestTimeoutMillis = AVERAGE_TIMEOUT
+						socketTimeoutMillis = AVERAGE_TIMEOUT
+					}
+
+					header(AUTHORIZATION_HEADER, token)
+				}
+			}
+
+			var body: InformationResponse? = null
+			if(kind == AccountKind.STUDENT) body = Json.decodeFromString<StudentInformationResponse>(response.readText())
+			if(kind == AccountKind.SCHOOL) body = Json.decodeFromString<SchoolInformationResponse>(response.readText())
+
+			//Проверяем ответ
+			when(response.status) {
+				HttpStatusCode.OK -> body
+				else -> null
 			}
 		}
 	}
@@ -82,6 +112,7 @@ final class AuthorizationRepository : KtorRepository() {
 				HttpStatusCode.OK -> {
 					val body = Json {
 						ignoreUnknownKeys = true
+						coerceInputValues = true
 					}.decodeFromString<AuthenticationResponse>(response.readText())
 					//Берём RefreshToken из куки
 					val cookies = httpClient.cookies(AUTHORIZATION_URL)
@@ -151,10 +182,65 @@ final class AuthorizationRepository : KtorRepository() {
 			}
 		}
 
+	suspend fun makeUpdateSchoolRequest(activeToken: String, request: UpdateSchoolRequest): HttpTask<Boolean> =
+		withContext(Dispatchers.IO) {
+			val httpClient = initClient()
+			val response = httpClient.use {
+				it.put<HttpResponse>(UPDATE_SCHOOL_URL) {
+					timeout {
+						requestTimeoutMillis = SHORT_TIMEOUT
+						socketTimeoutMillis = SHORT_TIMEOUT
+					}
+
+					header(AUTHORIZATION_HEADER, activeToken)
+
+					val json = Json.encodeToString(request)
+					body = TextContent(json, ContentType.Application.Json)
+				}
+			}
+
+			//Проверяем ответ
+			when(response.status) {
+				HttpStatusCode.OK -> HttpTask(TaskStatus.COMPLETED, true, WebStatus.NONE)
+				HttpStatusCode.Unauthorized -> HttpTask(TaskStatus.CANCELED, null, WebStatus.UNAUTHORIZED)
+				HttpStatusCode.BadRequest -> HttpTask(TaskStatus.CANCELED, false, WebStatus.NONE)
+				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+			}
+		}
+
+	suspend fun makeUpdateStudentRequest(activeToken: String, request: UpdateStudentRequest): HttpTask<Boolean> =
+		withContext(Dispatchers.IO) {
+			val httpClient = initClient()
+			val response = httpClient.use {
+				it.put<HttpResponse>(UPDATE_STUDENT_URL) {
+					timeout {
+						requestTimeoutMillis = SHORT_TIMEOUT
+						socketTimeoutMillis = SHORT_TIMEOUT
+					}
+
+					header(AUTHORIZATION_HEADER, activeToken)
+
+					val json = Json.encodeToString(request)
+					body = TextContent(json, ContentType.Application.Json)
+				}
+			}
+
+			//Проверяем ответ
+			when(response.status) {
+				HttpStatusCode.OK -> HttpTask(TaskStatus.COMPLETED, true, WebStatus.NONE)
+				HttpStatusCode.Unauthorized -> HttpTask(TaskStatus.CANCELED, null, WebStatus.UNAUTHORIZED)
+				HttpStatusCode.BadRequest -> HttpTask(TaskStatus.CANCELED, false, WebStatus.NONE)
+				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+			}
+		}
+
 	companion object {
 		internal const val REGISTRATION_URL = "$HOSTNAME/registration/"
 		internal const val AUTHORIZATION_URL = "$HOSTNAME/login/auth"
 		internal const val REVOKE_TOKEN_URL = "$HOSTNAME/login/revoke-token"
 		internal const val UPDATE_PASSWORD_URL = "$HOSTNAME/login/update-pass"
+		internal const val PERSONAL_INFORMATION_URL = "$HOSTNAME/login/self-data"
+		internal const val UPDATE_SCHOOL_URL = "$HOSTNAME/login/update-school"
+		internal const val UPDATE_STUDENT_URL = "$HOSTNAME/login/update-student"
 	}
 }

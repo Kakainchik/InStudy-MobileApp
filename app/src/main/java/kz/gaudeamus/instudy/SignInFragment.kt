@@ -1,6 +1,7 @@
 package kz.gaudeamus.instudy
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -8,22 +9,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kz.gaudeamus.instudy.entities.Account
-import kz.gaudeamus.instudy.entities.AccountKind
-import kz.gaudeamus.instudy.entities.AuthorizationRequest
+import kz.gaudeamus.instudy.entities.*
 import kz.gaudeamus.instudy.models.AuthorizationViewModel
 import kz.gaudeamus.instudy.models.HttpTask.*
 import java.lang.ClassCastException
+import java.time.LocalDate
 
 class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private val model: AuthorizationViewModel by activityViewModels()
     private var loginInFragmentListener: OnLoginInFragmentListener? = null
+    private var settings: SharedPreferences? = null
+
+    private lateinit var user: Account
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        settings = activity?.getSharedPreferences("PERSONAL_DATA_KEY", Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
@@ -66,6 +76,29 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     isValid = false
                 } ?:run { passwordLayout.error = null }
 
+            model.receivedPersonalInformation.observe(this, { storeData ->
+                when(storeData) {
+                    is SchoolInformationResponse -> {
+                        settings?.edit {
+                            putString("ORGANIZATION", storeData.organization)
+                            putString("EXPIRES", storeData.licenseExpiresAt)
+                            loginInFragmentListener?.onAuthorized(user)
+                        }
+                    }
+                    is StudentInformationResponse -> {
+                        settings?.edit {
+                            putString("NAME", storeData.name)
+                            putString("SURNAME", storeData.surname)
+                            putString("PHONE", storeData.phone)
+                            loginInFragmentListener?.onAuthorized(user)
+                        }
+                    }
+                    null -> {
+                        //NOTHING
+                    }
+                }
+            })
+
             //Все условия соблюдены - отправляем запрос
             if(isValid) {
                 val data = AuthorizationRequest(email = emailText.text.toString(),
@@ -86,13 +119,18 @@ class SignInFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                             //Возвращаемся в main menu
                             resource?.let {
-                                val user = Account(id = resource.id,
-                                                   email = resource.email,
-                                                   token = resource.token,
-                                                   refreshToken = resource.refreshToken!!,
-                                                   kind = AccountKind.from(resource.role))
+                                if(!resource.isVerified)
+                                    Toast.makeText(context, R.string.error_sign_in_invalid_login_or_pass, Toast.LENGTH_LONG).show()
+                                else {
+                                    user = Account(id = resource.id,
+                                                       email = resource.email,
+                                                       token = resource.token!!,
+                                                       refreshToken = resource.refreshToken!!,
+                                                       kind = AccountKind.from(resource.role))
 
-                                this.loginInFragmentListener?.onAuthorized(user)
+                                    if(user.kind == AccountKind.MODERATOR) this.loginInFragmentListener?.onAuthorized(user)
+                                    else model.receivePersonalInformation(user)
+                                }
                             } ?:run {
                                 //Если по каким-то причинам нет данных
                                 Toast.makeText(context,

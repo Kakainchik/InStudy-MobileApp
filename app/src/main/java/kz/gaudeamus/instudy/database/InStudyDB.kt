@@ -13,7 +13,7 @@ import kz.gaudeamus.instudy.entities.Student
 @TypeConverters(Converter::class)
 abstract class InStudyDB : RoomDatabase() {
 
-	abstract fun cardDao(): CardDAO
+	abstract fun cardDao(): StudentCardDAO
 	abstract fun schoolCardDao(): SchoolCardDAO
 	abstract fun queryDao(): QueryDAO
 

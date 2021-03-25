@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        android:id="@+id/change_student_container"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        tools:context=".ChangeStudentContactActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+
+        <com.google.android.material.card.MaterialCardView
+                android:id="@+id/change_student_name_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="4dp">
+
+            <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingVertical="@dimen/vertical_padding_card"
+                    android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+                <TableRow>
+
+                    <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/change_student_name_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/title_contacts"
+                            android:fontFamily="sans-serif-black"/>
+
+                </TableRow>
+
+                <TableRow
+                        android:paddingStart="@dimen/start_padding_change_contact_card">
+
+                    <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_change_name"
+                            android:textColor="?android:editTextColor"/>
+
+                    <EditText
+                            android:id="@+id/change_student_name_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="2dp"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"/>
+
+                </TableRow>
+
+                <TableRow
+                        android:paddingStart="@dimen/start_padding_change_contact_card">
+
+                    <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_change_surname"
+                            android:textColor="?android:editTextColor"/>
+
+                    <EditText
+                            android:id="@+id/change_student_surname_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="2dp"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"/>
+
+                </TableRow>
+
+                <TableRow
+                        android:paddingStart="@dimen/start_padding_change_contact_card">
+
+                    <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_change_phone"
+                            android:textColor="?android:editTextColor"/>
+
+                    <EditText
+                            android:id="@+id/change_student_phone_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="2dp"
+                            android:inputType="phone"
+                            android:maxLines="1"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+                android:id="@+id/change_student_location_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/change_student_name_card"
+                android:layout_marginTop="@dimen/horizontal_margin_card"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="4dp"
+                android:orientation="vertical">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingVertical="@dimen/vertical_padding_card"
+                    android:paddingHorizontal="@dimen/horizontal_padding_card">
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/change_student_location_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_location"
+                        android:fontFamily="sans-serif-black"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/change_student_default_city_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/change_student_location_title"
+                        android:paddingStart="@dimen/start_padding_change_contact_card"
+                        android:text="@string/switch_default_city"
+                        android:textColor="?android:editTextColor"/>
+
+                <AutoCompleteTextView
+                        android:id="@+id/change_student_default_city_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/change_student_default_city_switch"
+                        android:paddingStart="@dimen/start_padding_change_contact_card"
+                        android:hint="@string/title_default_city"
+                        android:visibility="gone"
+                        android:inputType="textNoSuggestions"
+                        android:maxLines="1"/>
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/change_student_save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/change_student_location_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/vertical_margin_card"
+                android:text="@string/bt_save"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
+                android:elevation="2dp"
+                style="?android:attr/progressBarStyle"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -1,6 +1,8 @@
 package kz.gaudeamus.instudy.entities
 
 import kotlinx.serialization.Serializable
+import kz.gaudeamus.instudy.DateSerializer
+import java.time.LocalDate
 
 /**
  * @see
@@ -18,5 +20,5 @@ data class Account(val id: Int,
 				   val refreshToken: String,
 				   val kind: AccountKind) : java.io.Serializable {
 	public fun updateToken(newToken: String, newRefreshToken: String): Account =
-		Account(id, email, newToken, newRefreshToken, kind)
+		this.copy(token = newToken, refreshToken = newRefreshToken)
 }

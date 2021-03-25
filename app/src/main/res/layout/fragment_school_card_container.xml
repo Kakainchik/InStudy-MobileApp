@@ -26,23 +26,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                <androidx.constraintlayout.utils.widget.ImageFilterButton
+                <ImageButton
                         android:id="@+id/appbar_back_button"
                         android:layout_width="55dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:src="@drawable/ic_sharp_arrow_back_24"
+                        android:contentDescription="Back"
                         android:backgroundTint="#000000FF"
                         android:visibility="invisible"/>
 
                 <EditText
+                        android:id="@+id/appbar_search_text"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/colorTextBoxBackground"
                         android:layout_toEndOf="@id/appbar_back_button"
                         android:layout_alignParentEnd="true"
                         android:layout_marginStart="10dp"
-                        android:maxLines="1"/>
+                        android:maxLines="1"
+                        android:inputType="textFilter"
+                        android:hint="@string/menu_search_with_dots"/>
 
             </RelativeLayout>
 

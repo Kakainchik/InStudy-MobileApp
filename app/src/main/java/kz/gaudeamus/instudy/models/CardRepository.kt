@@ -10,9 +10,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kz.gaudeamus.instudy.entities.AddCardRequest
-import kz.gaudeamus.instudy.entities.CardResponse
-import kz.gaudeamus.instudy.entities.FilteredCardResponse
+import kz.gaudeamus.instudy.entities.*
 import kz.gaudeamus.instudy.models.HttpTask.*
 
 final class CardRepository : KtorRepository() {
@@ -42,6 +40,44 @@ final class CardRepository : KtorRepository() {
 						ignoreUnknownKeys = true
 					}.decodeFromString<CardResponse>(response.readText())
 					HttpTask(TaskStatus.COMPLETED, body, WebStatus.NONE)
+				}
+				HttpStatusCode.Unauthorized -> {
+					HttpTask(TaskStatus.CANCELED, null, WebStatus.UNAUTHORIZED)
+				}
+				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+			}
+		}
+	}
+
+	/**
+	 * Ассинхронно делает запрос на изменение карточки на сервере.
+	 */
+	suspend fun makeUpdateCardRequest(request: UpdateCardRequest, activeToken: String): HttpTask<CardResponse> {
+		return withContext(Dispatchers.IO) {
+			val httpClient = initClient()
+			val response = httpClient.use {
+				it.put<HttpResponse>(UPDATE_CARD_URL) {
+					timeout {
+						requestTimeoutMillis = AVERAGE_TIMEOUT
+						socketTimeoutMillis = AVERAGE_TIMEOUT
+					}
+
+					header(AUTHORIZATION_HEADER, activeToken)
+
+					val json = Json.encodeToString(request)
+					body = TextContent(json, ContentType.Application.Json)
+				}
+			}
+
+			when(response.status) {
+				HttpStatusCode.OK -> {
+					val body = Json {
+						ignoreUnknownKeys = true
+					}.decodeFromString<CardResponse>(response.readText())
+					HttpTask(TaskStatus.COMPLETED, body, WebStatus.NONE)
+				}
+				HttpStatusCode.BadRequest -> {
+					HttpTask(TaskStatus.COMPLETED, null, WebStatus.NONE)
 				}
 				HttpStatusCode.Unauthorized -> {
 					HttpTask(TaskStatus.CANCELED, null, WebStatus.UNAUTHORIZED)
@@ -112,7 +148,7 @@ final class CardRepository : KtorRepository() {
 	/**
 	 * Ассинхронно делает запрос на получение карточек по фильтру. E.g.: Актуально для школ.
 	 */
-	suspend fun makeGetAllCardByFilterRequest(activeToken: String): HttpTask<Array<FilteredCardResponse>> {
+	suspend fun makeGetAllCardByFilterRequest(activeToken: String, filter: CardFilter): HttpTask<Array<FilteredCardResponse>> {
 		return withContext(Dispatchers.IO) {
 			val httpClient = initClient()
 			val response = httpClient.use {
@@ -123,6 +159,12 @@ final class CardRepository : KtorRepository() {
 					}
 
 					header(AUTHORIZATION_HEADER, activeToken)
+
+					filter.title?.run { parameter(TITLE_PARAMETER, this) }
+					filter.city?.run { parameter(CITY_PARAMETER, this) }
+					filter.faculty?.run { parameter(FACULTY_PARAMETER, this) }
+					filter.speciality?.run { parameter(SPECIALITY_PARAMETER, this) }
+					parameter(COUNT_PARAMETER, filter.count)
 				}
 			}
 
@@ -143,8 +185,15 @@ final class CardRepository : KtorRepository() {
 
 	companion object {
 		internal const val ADD_CARD_URL = "$HOSTNAME/card/add"
+		internal const val UPDATE_CARD_URL = "$HOSTNAME/card/update"
 		internal const val GET_OWN_CARDS_URL = "$HOSTNAME/card"
 		internal const val DELETE_OWN_CARD_URL = "$HOSTNAME/card"
 		internal const val GET_CARDS_BY_FILTER = "$HOSTNAME/card/filter"
+
+		internal const val TITLE_PARAMETER = "title"
+		internal const val CITY_PARAMETER = "city"
+		internal const val FACULTY_PARAMETER = "faculty"
+		internal const val SPECIALITY_PARAMETER = "speciality"
+		internal const val COUNT_PARAMETER = "maxCount"
 	}
 }

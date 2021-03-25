@@ -13,7 +13,6 @@ import kz.gaudeamus.instudy.database.QueryDAO
 import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.PropsResponse
 import kz.gaudeamus.instudy.entities.SchoolQuery
-import kz.gaudeamus.instudy.entities.SchoolRegistrationResponse
 import kz.gaudeamus.instudy.models.HttpTask.*
 
 class QueryModeratorViewModel : StandardHttpViewModel {

@@ -4,7 +4,7 @@ import androidx.room.*
 import kz.gaudeamus.instudy.entities.Card
 
 @Dao
-interface CardDAO {
+interface StudentCardDAO {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insertAll(vararg cards: Card): LongArray
 

@@ -27,10 +27,22 @@ data class RegistrationResponse(val message: String?)
 @Serializable
 data class AuthenticationResponse(val id: Int,
 								  val email: String,
-								  val token: String,
+								  val token: String?,
 								  val role: Int,
 								  val isVerified: Boolean,
 								  var refreshToken: String? = null)
+
+@Serializable
+abstract class InformationResponse
+
+@Serializable
+data class SchoolInformationResponse(val organization: String,
+									 val licenseExpiresAt: String) : InformationResponse()
+
+@Serializable
+data class StudentInformationResponse(val phone: String,
+									  val name: String,
+									  val surname: String?) : InformationResponse()
 
 @Serializable
 data class RefreshTokenResponse(val token: String,

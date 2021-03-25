@@ -1,6 +1,7 @@
 package kz.gaudeamus.instudy.models
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.room.withTransaction
@@ -20,6 +21,7 @@ class CardSchoolViewModel : StandardHttpViewModel {
 	private val dao: SchoolCardDAO
 	protected override val repository = CardRepository()
 
+	public val filterLiveData = MutableLiveData<CardFilter>()
 	public val receivedLiveData = SingleLiveEvent<HttpTask<Array<FilteredCardResponse>>>()
 	public val localReceivedCards = SingleLiveEvent<List<FilteredCard>>()
 
@@ -39,11 +41,11 @@ class CardSchoolViewModel : StandardHttpViewModel {
 		super.onCleared()
 	}
 
-	public fun getFromServerByFilterAndSaveInDB(currentAccount: Account) {
+	public fun getFromServerByFilterAndSaveInDB(currentAccount: Account, filter: CardFilter) {
 		receivedLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
 			val result: HttpTask<Array<FilteredCardResponse>> = repository.makeRequest {
-				repository.makeGetAllCardByFilterRequest(currentAccount.token)
+				repository.makeGetAllCardByFilterRequest(currentAccount.token, filter)
 			}
 
 			if(result.taskStatus == TaskStatus.COMPLETED && result.data != null) {

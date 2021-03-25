@@ -90,7 +90,7 @@ abstract class KtorRepository {
 		}
 
 	companion object {
-		internal const val HOSTNAME = "http://37.151.131.144:44338/api"
+		internal const val HOSTNAME = "http://5.76.202.190:44338/api"
 		internal const val REFRESH_TOKEN_URL = "$HOSTNAME/login/refresh-token"
 
 		internal const val CONTENT_TYPE = "application/json"
