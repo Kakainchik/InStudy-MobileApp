@@ -60,6 +60,9 @@ class SettingsViewModel : StandardHttpViewModel {
 		}
 	}
 
+	/**
+	 * Обновляет аккаунт студента.
+	 */
 	fun updateStudent(user: Account, request: UpdateStudentRequest) {
 		//Устанавливаем метку как "идущий процесс"
 		updateAccountLiveData.value = HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE)
@@ -77,6 +80,9 @@ class SettingsViewModel : StandardHttpViewModel {
 		}
 	}
 
+	/**
+	 * Обновляет аккаунт школы.
+	 */
 	fun updateSchool(user: Account, request: UpdateSchoolRequest) {
 		//Устанавливаем метку как "идущий процесс"
 		updateAccountLiveData.value = HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE)

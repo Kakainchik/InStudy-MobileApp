@@ -15,6 +15,9 @@ abstract class StandardHttpViewModel(application: Application) : AndroidViewMode
 	protected abstract val repository: KtorRepository
 	public val refreshLiveData = SingleLiveEvent<RefreshTokenResponse>()
 
+	/**
+	 * Обновляет активные токен через RefreshToken.
+	 */
 	public open fun refreshToken(refreshToken: String) {
 		viewModelScope.launch {
 			val result: HttpTask<RefreshTokenResponse> = repository.makeRequest {
@@ -25,6 +28,9 @@ abstract class StandardHttpViewModel(application: Application) : AndroidViewMode
 		}
 	}
 
+	/**
+	 * Осуществляет выполнение метода [action] через получения нового активного токена.
+	 */
 	public inline fun throughRefreshToken(context: Context, account: Account, crossinline action: (account: Account) -> Unit) {
 		refreshLiveData.observe(context as LifecycleOwner) {
 			val newAccount = account.updateToken(it.token, it.refreshToken!!)

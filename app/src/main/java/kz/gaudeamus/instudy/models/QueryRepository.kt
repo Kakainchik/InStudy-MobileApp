@@ -14,6 +14,9 @@ import kz.gaudeamus.instudy.models.HttpTask.*
 import kotlin.io.use
 
 class QueryRepository : KtorRepository() {
+	/**
+	 * Асинхронно делает запрос на получение запросов школ на их регистрацию.
+	 */
 	public suspend fun makeGetUnverifiedSchoolsRequest(activeToken: String): HttpTask<Array<SchoolQuery>> =
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()
@@ -41,6 +44,9 @@ class QueryRepository : KtorRepository() {
 			}
 		}
 
+	/**
+	 * Асинхронно делает запрос получение реквизитов школ.
+	 */
 	public suspend fun makeGetPropsRequest(activeToken: String, id: Long): HttpTask<Array<PropsResponse>> =
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()
@@ -67,6 +73,9 @@ class QueryRepository : KtorRepository() {
 			}
 		}
 
+	/**
+	 * Асинхронно получает запрос на верификацию школы.
+	 */
 	public suspend fun makeVerifyQueryRequest(activeToken: String, id: Long): HttpTask<Boolean> =
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()
@@ -91,6 +100,9 @@ class QueryRepository : KtorRepository() {
 			}
 		}
 
+	/**
+	 * Асинхронно делает запрос на отклонение запроса школы.
+	 */
 	public suspend fun makeDenyQueryRequest(activeToken: String, id: Long, comment: String? = null): HttpTask<Boolean> =
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()

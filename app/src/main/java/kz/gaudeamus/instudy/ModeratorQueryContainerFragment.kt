@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.Toolbar
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import kz.gaudeamus.instudy.entities.Account
 import kz.gaudeamus.instudy.entities.SchoolQuery
-import kz.gaudeamus.instudy.models.HttpTask
 import kz.gaudeamus.instudy.models.HttpTask.*
 import kz.gaudeamus.instudy.models.QueryModeratorViewModel
 import kz.gaudeamus.instudy.models.QueryAdapter
@@ -35,6 +33,7 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 	private lateinit var progressBar: ContentLoadingProgressBar
 	private lateinit var cardList: RecyclerView
 	private lateinit var currentAccount: Account
+	private lateinit var refreshMenuItem: MenuItem
 
 	private var pickedQueryIndex: Int = 0
 	private var isFirstLoad: Boolean = true
@@ -57,6 +56,7 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 		cardList = view.findViewById(R.id.card_list)
 		notificationLayer = view.findViewById(R.id.no_query_image)
 		progressBar = view.findViewById(R.id.progressbar)
+		refreshMenuItem = appBar.menu.findItem(R.id.appbar_refresh_query)
 
 		currentAccount = IOFileHelper.anyAccountOrNull(requireContext())!!
 		cardList.adapter = queryAdapter
@@ -77,8 +77,8 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 						isFirstLoad = false
 						return@observe
 					}
-					UIHelper.makeEnableUI(false, container!!)
-					progressBar.show()
+					//Анимация загрузки
+					refreshMenuItem.isEnabled = false
 				}
 				TaskStatus.COMPLETED -> {
 					storeData.data?.let {
@@ -86,8 +86,7 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 						queries.addAll(it)
 						queryAdapter.notifyDataSetChanged()
 					}
-					UIHelper.makeEnableUI(true, container!!)
-					progressBar.hide()
+					refreshMenuItem.isEnabled = true
 				}
 				TaskStatus.CANCELED -> {
 					//При устаревшем токене - пробуем обновить его и отправить запрос заново
@@ -95,10 +94,7 @@ class ModeratorQueryContainerFragment : Fragment(), Toolbar.OnMenuItemClickListe
 						queryModel.throughRefreshToken(requireContext(), currentAccount) { newAccount ->
 							queryModel.getAllFromServerAndMergeWithDB(newAccount)
 						}
-					} else {
-						UIHelper.makeEnableUI(true, container!!)
-						progressBar.hide()
-					}
+					} else refreshMenuItem.isEnabled = false
 				}
 			}
 		})

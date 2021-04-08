@@ -26,6 +26,7 @@ class CardStudentViewModel : StandardHttpViewModel {
 	public val localReceivedCards = SingleLiveEvent<List<Card>>()
 	public val deletedCards = SingleLiveEvent<HttpTask<List<Card>>>()
 	public val sendLiveData = SingleLiveEvent<HttpTask<CardResponse>>()
+	public val updateLiveData = SingleLiveEvent<HttpTask<CardResponse>>()
 	public val receivedLiveData = SingleLiveEvent<HttpTask<Array<CardResponse>>>()
 
 	constructor(application: Application) : super(application) {
@@ -47,11 +48,16 @@ class CardStudentViewModel : StandardHttpViewModel {
 	/**
 	 * Отправляет карточку на сервер.
 	 */
-	fun sendToServer(card: AddCardRequest, currentAccount: Account) {
+	fun sendToServer(card: Card, currentAccount: Account) {
 		sendLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
+			val requestData = AddCardRequest(title = card.title,
+											 content = card.content,
+											 soughtCity = card.city,
+											 faculty = card.faculty,
+											 speciality = card.speciality)
 			val result: HttpTask<CardResponse> = repository.makeRequest {
-				repository.makeAddCardRequest(card, currentAccount.token)
+				repository.makeAddCardRequest(requestData, currentAccount.token)
 			}
 
 			sendLiveData.postValue(result)
@@ -61,14 +67,21 @@ class CardStudentViewModel : StandardHttpViewModel {
 	/**
 	 * Отправляет обновлённую карточку на сервер.
 	 */
-	fun updateToServer(card: UpdateCardRequest, currentAccount: Account) {
-		sendLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
+	fun updateToServer(card: Card, currentAccount: Account) {
+		updateLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
+			val requestData = UpdateCardRequest(id = card.id!!,
+												title = card.title,
+												content = card.content,
+												soughtCity = card.city,
+												faculty = card.faculty,
+												speciality = card.speciality)
+
 			val result: HttpTask<CardResponse> = repository.makeRequest {
-				repository.makeUpdateCardRequest(card, currentAccount.token)
+				repository.makeUpdateCardRequest(requestData, currentAccount.token)
 			}
 
-			sendLiveData.postValue(result)
+			updateLiveData.postValue(result)
 		}
 	}
 

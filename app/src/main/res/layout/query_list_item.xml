@@ -12,10 +12,11 @@
 
         <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/query_item_organization_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/query_item_verified_text"
                 android:text="Organization"
                 android:textSize="@dimen/title_text_size"
                 android:maxLines="1"

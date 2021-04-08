@@ -4,8 +4,9 @@
     <item android:id="@+id/appbar_refresh_card"
             android:enabled="true"
             android:title="@string/menu_refresh_card"
-            android:icon="@drawable/ic_sharp_refresh_24"
-            app:showAsAction="ifRoom"/>
+            android:icon="@drawable/appbar_refresh_selector"
+            app:showAsAction="ifRoom"
+            android:checkable="true"/>
 
     <item android:id="@+id/appbar_add_card"
             android:enabled="true"

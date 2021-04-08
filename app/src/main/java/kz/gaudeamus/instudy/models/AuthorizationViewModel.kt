@@ -35,6 +35,9 @@ class AuthorizationViewModel(application: Application) : StandardHttpViewModel(a
 		}
 	}
 
+	/**
+	 * Получает персональные данные.
+	 */
 	fun receivePersonalInformation(user: Account) {
 		//Устанавливаем метку как "идущий процесс"
 		receivedPersonalInformation.value = null

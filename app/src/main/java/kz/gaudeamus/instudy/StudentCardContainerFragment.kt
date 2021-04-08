@@ -50,6 +50,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 	private lateinit var progressBar: ContentLoadingProgressBar
 	private lateinit var cardList: RecyclerView
 	private lateinit var currentAccount: Account
+	private lateinit var refreshMenuItem: MenuItem
 
 	private var actionMode: ActionMode? = null
 	private var pickedCardIndex: Int = 0
@@ -67,6 +68,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 		cardList = view.findViewById(R.id.card_list)
 		notificationLayer = view.findViewById(R.id.no_card_image)
 		progressBar = view.findViewById(R.id.progressbar)
+		refreshMenuItem = appBar.menu.findItem(R.id.appbar_refresh_card)
 
 		currentAccount = IOFileHelper.anyAccountOrNull(requireContext())!!
 		cardList.adapter = cardAdapter
@@ -131,6 +133,7 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 				cards.apply {
 					this.clear()
 					this.addAll(storeData)
+					this.sortByDescending { it.created }
 				}
 				cardAdapter.notifyDataSetChanged()
 			}
@@ -146,13 +149,12 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 						isFirstLoad = false
 						return@observe
 					}
-					UIHelper.makeEnableUI(false, container!!)
-					progressBar.show()
+					//Анимация загрузки
+					refreshMenuItem.isEnabled = false
 				}
 				TaskStatus.COMPLETED -> {
 					cardModel.getAllFromDB()
-					UIHelper.makeEnableUI(true, container!!)
-					progressBar.hide()
+					refreshMenuItem.isEnabled = true
 				}
 				TaskStatus.CANCELED -> {
 					when(storeData.webStatus) {
@@ -167,13 +169,9 @@ class StudentCardContainerFragment : Fragment(R.layout.fragment_student_card_con
 							/*Если не удаётся сразу подключиться к серверу - просто подгружаем
 							имеющиеся из локальной базы*/
 							cardModel.getAllFromDB()
-							UIHelper.makeEnableUI(true, container!!)
-							progressBar.hide()
+							refreshMenuItem.isEnabled = true
 						}
-						else -> {
-							UIHelper.makeEnableUI(true, container!!)
-							progressBar.hide()
-						}
+						else -> refreshMenuItem.isEnabled = true
 					}
 				}
 			}

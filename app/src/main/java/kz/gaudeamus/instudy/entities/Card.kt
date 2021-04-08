@@ -24,10 +24,10 @@ data class Card(
 	@ColumnInfo(name = "studentOwnerId")
 	val studentId: Long? = null,
 	var title: String,
-	var content: String,
+	var content: String?,
 	var city: String,
-	var faculty: String,
-	var speciality: String,
+	var faculty: String?,
+	var speciality: String?,
 	@Serializable(with = DateSerializer::class)
 	var created: LocalDate,
 	var status: CardStatus,

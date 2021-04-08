@@ -15,7 +15,7 @@ import kz.gaudeamus.instudy.models.HttpTask.*
 
 final class CardRepository : KtorRepository() {
 	/**
-	 * Ассинхронно отправляет запрос на добавление карточки в базу.
+	 * Асинхронно отправляет запрос на добавление карточки в базу.
 	 */
 	suspend fun makeAddCardRequest(request: AddCardRequest, activeToken: String): HttpTask<CardResponse> {
 		return withContext(Dispatchers.IO) {
@@ -50,7 +50,7 @@ final class CardRepository : KtorRepository() {
 	}
 
 	/**
-	 * Ассинхронно делает запрос на изменение карточки на сервере.
+	 * Асинхронно делает запрос на изменение карточки на сервере.
 	 */
 	suspend fun makeUpdateCardRequest(request: UpdateCardRequest, activeToken: String): HttpTask<CardResponse> {
 		return withContext(Dispatchers.IO) {
@@ -88,7 +88,7 @@ final class CardRepository : KtorRepository() {
 	}
 
 	/**
-	 * Ассинхронно делает запрос на получение всех личных карточек из базы.
+	 * Асинхронно делает запрос на получение всех личных карточек из базы.
 	 */
 	suspend fun makeGetOwnCardRequest(activeToken: String): HttpTask<Array<CardResponse>> {
 		return withContext(Dispatchers.IO) {
@@ -118,7 +118,7 @@ final class CardRepository : KtorRepository() {
 	}
 
 	/**
-	 * Ассинхронно делает запрос на удаление личной карточки из базы.
+	 * Асинхронно делает запрос на удаление личной карточки из базы.
 	 */
 	suspend fun makeDeleteCardRequest(activeToken: String, cardId: Long): HttpTask<Boolean> {
 		return withContext(Dispatchers.IO) {
@@ -146,7 +146,7 @@ final class CardRepository : KtorRepository() {
 	}
 
 	/**
-	 * Ассинхронно делает запрос на получение карточек по фильтру. E.g.: Актуально для школ.
+	 * Асинхронно делает запрос на получение карточек по фильтру. E.g.: Актуально для школ.
 	 */
 	suspend fun makeGetAllCardByFilterRequest(activeToken: String, filter: CardFilter): HttpTask<Array<FilteredCardResponse>> {
 		return withContext(Dispatchers.IO) {

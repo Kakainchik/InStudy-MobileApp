@@ -9,7 +9,7 @@ import kz.gaudeamus.instudy.entities.Student
  * Контекст локальной базы данных приложения.
  * @param version Важно: инкрементировать каждый раз, когда обновляются сущности базы(таблицы) и миграции.
  */
-@Database(entities = [Card::class, SchoolQuery::class, Student::class], version = 12)
+@Database(entities = [Card::class, SchoolQuery::class, Student::class], version = 13)
 @TypeConverters(Converter::class)
 abstract class InStudyDB : RoomDatabase() {
 

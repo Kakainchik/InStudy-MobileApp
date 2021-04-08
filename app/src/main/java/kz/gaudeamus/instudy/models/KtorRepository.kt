@@ -43,7 +43,7 @@ abstract class KtorRepository {
 		}
 
 	/**
-	 * Ассинхронно посылает POST запрос на получение нового токена по имеющемуся Refresh токену.
+	 * Асинхронно посылает POST запрос на получение нового токена по имеющемуся Refresh токену.
 	 */
 	public open suspend fun makeRefreshTokenRequest(refreshToken: String): HttpTask<RefreshTokenResponse> =
 		withContext(Dispatchers.IO) {

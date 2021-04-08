@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Сущность студента в локальной базе данных.
+ */
 @Entity(tableName = "students")
 data class Student(
 	@PrimaryKey(autoGenerate = true)

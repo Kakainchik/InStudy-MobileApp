@@ -7,6 +7,9 @@ import kz.gaudeamus.instudy.DateSerializer
 import java.time.LocalDate
 import java.util.stream.Collectors
 
+/**
+ * Сущность запроса на регистрации школы в локальной базе данных.
+ */
 @Serializable
 @Entity(tableName = "queries")
 data class SchoolQuery(

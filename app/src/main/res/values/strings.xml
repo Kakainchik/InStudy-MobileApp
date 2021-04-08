@@ -38,10 +38,9 @@
     <string name="error_same_file_exists">Such a file is already attached.</string>
     <string name="menu_add_card">Add card</string>
     <string name="menu_delete_card">Delete</string>
-    <string name="error_http_timeout">Response timed out. Try again.</string>
-    <string name="error_http_connect">Unable to connect to server.</string>
+    <string name="error_http_timeout">Network error. Response timed out. Try again.</string>
+    <string name="error_http_connect">Network error. Unable to connect to server. Check you internet connection!</string>
     <string name="error_unexpected">Unexpected error. Try again.</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="status_card_draft">Draft</string>
     <string name="status_card_active">Active</string>
     <string name="status_card_expired">Expired</string>
@@ -50,8 +49,8 @@
     <string name="menu_refresh_card">Refresh</string>
     <string name="bt_save">Save</string>
     <string name="title_written_city">City where I look for</string>
-    <string name="title_written_speciality">Speciality what I look for</string>
-    <string name="title_written_faculty">Faculty what I look for</string>
+    <string name="title_written_speciality">Speciality what I look for(optional)</string>
+    <string name="title_written_faculty">Faculty what I look for(optional)</string>
     <string name="title_title">Title</string>
     <string name="title_written_comment">My comment(optional)</string>
     <string name="error_fill_fields">Empty fields!</string>
@@ -74,18 +73,18 @@
     <string name="title_query_information">Query information</string>
     <string name="title_query_created">Created: %1$s</string>
     <string name="title_query_props">Their props</string>
-    <string name="intent_open_with">Open with...</string>
+    <string name="intent_open_with">Open with…</string>
     <string name="bt_verify">Verify</string>
     <string name="bt_deny">Deny</string>
     <string name="alert_sure_verify_query_text">Are you sure to verify this query?</string>
     <string name="title_attention">Attention!</string>
-    <string name="bt_ok" translatable="false">Ok</string>
+    <string name="bt_ok" translatable="false">OK</string>
     <string name="bt_cancel">Cancel</string>
     <string name="error_cannot_verify_query">Unable verify query or this one already has been verified</string>
     <string name="alert_deny_comment">Denying comment(optional)</string>
     <string name="alert_sure_deny_query_text">Are you sure to deny this query?</string>
     <string name="error_cannot_deny_query">Unable deny query or this one already has been denied.</string>
-    <string name="notice_query_denied">Registration denied succesfully!</string>
+    <string name="notice_query_denied">Registration denied successfully!</string>
     <string name="notice_school_no_card">We could not find any cards for you. Try filter your search.</string>
     <string name="menu_filter_card">Filter</string>
     <string name="menu_search_card">Search</string>
@@ -116,6 +115,12 @@
     <string name="title_location">Location</string>
     <string name="title_contacts">Contacts</string>
     <string name="title_change_phone">Change phone:</string>
-    <string name="notice_account_updated">Updated sucessfully!</string>
+    <string name="notice_account_updated">Updated successfully!</string>
     <string name="menu_search_with_dots">Search…</string>
+    <string name="alert_cancel_creating_card">Leave without save?</string>
+    <string name="bt_dont_save">Do not save</string>
+    <string name="title_not_indicated">Not indicated</string>
+    <string name="bt_keep_draft">Keep in draft</string>
+    <string name="bt_publish">Publish</string>
+    <string name="bt_edit">Edit</string>
 </resources>

@@ -14,4 +14,13 @@
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"/>
 
+    <ImageView
+            android:tag="props_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/props_progress_bar_animation"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="45dp"
+            android:visibility="invisible"/>
+
 </FrameLayout>

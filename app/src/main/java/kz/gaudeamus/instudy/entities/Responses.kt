@@ -51,10 +51,10 @@ data class RefreshTokenResponse(val token: String,
 @Serializable
 data class CardResponse(val id: Long,
 						val title: String,
-						val content: String,
+						val content: String?,
 						val soughtCity: String,
-						val faculty: String,
-						val speciality: String,
+						val faculty: String?,
+						val speciality: String?,
 						val created: String,
 						val isValid: Boolean)
 

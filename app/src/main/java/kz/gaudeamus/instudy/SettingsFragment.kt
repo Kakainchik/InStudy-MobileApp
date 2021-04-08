@@ -77,10 +77,12 @@ class SettingsFragment : Fragment() {
 							  Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 			emailText.setText(spannable)
 		}
+		if(currentAccount.kind == AccountKind.MODERATOR)
+			contactButton.visibility = View.GONE
 
 		settings?.run {
 			if(currentAccount.kind == AccountKind.STUDENT) {
-				val fullname = "${getString("NAME", "NAME")} ${getString("SURNAME", null)}"
+				val fullname = "${getString("NAME", "NAME")} ${getString("SURNAME", "")}"
 				fullnameText.text = fullname
 			}
 			if(currentAccount.kind == AccountKind.SCHOOL) {
@@ -133,6 +135,9 @@ class SettingsFragment : Fragment() {
 		}
 	}
 
+	/**
+	 * Класс для перехода на страницу изменения контактных данных и получения итогового результата от неё.
+	 */
 	private class ChangeContactActivityContract : ActivityResultContract<Account, Boolean>() {
 		override fun createIntent(context: Context, input: Account): Intent {
 			return when(input.kind) {

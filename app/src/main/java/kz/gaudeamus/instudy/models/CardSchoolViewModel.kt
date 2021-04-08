@@ -41,6 +41,9 @@ class CardSchoolViewModel : StandardHttpViewModel {
 		super.onCleared()
 	}
 
+	/**
+	 * Получает по фильтру карточки с сервера и сохраняет их в локальной базе.
+	 */
 	public fun getFromServerByFilterAndSaveInDB(currentAccount: Account, filter: CardFilter) {
 		receivedLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {

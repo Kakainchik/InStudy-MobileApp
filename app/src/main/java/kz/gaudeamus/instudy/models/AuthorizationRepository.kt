@@ -20,7 +20,7 @@ import java.net.URLDecoder
 final class AuthorizationRepository : KtorRepository() {
 
 	/**
-	 * Ассинхронно делает общий запрос на регистрацию по типу пользователя.
+	 * Асинхронно делает общий запрос на регистрацию по типу пользователя.
 	 */
 	private suspend fun makeRegistrationRequest(bodyRequest: String, whom: AccountKind) : HttpTask<RegistrationResponse> {
 		return withContext(Dispatchers.IO) {
@@ -47,6 +47,9 @@ final class AuthorizationRepository : KtorRepository() {
 		}
 	}
 
+	/**
+	 * Асинхронно делает общий запрос на получение персональных данных аккаунта.
+	 */
 	suspend fun makeGetPersonalInformationRequest(token: String, kind: AccountKind) : InformationResponse? {
 		return withContext(Dispatchers.IO) {
 			val httpClient = initClient()
@@ -75,21 +78,21 @@ final class AuthorizationRepository : KtorRepository() {
 	}
 
 	/**
-	 * Ассинхронно отправляет запрос на регистрацию школы
+	 * Асинхронно отправляет запрос на регистрацию школы
 	 */
 	suspend fun makeRegistrationRequest(request: RegistrationSchoolRequest) : HttpTask<RegistrationResponse> {
 		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.SCHOOL)
 	}
 
 	/**
-	 * Ассинхронно отправляет запрос на регистрацию студента.
+	 * Асинхронно отправляет запрос на регистрацию студента.
 	 */
 	suspend fun makeRegistrationRequest(request: RegistrationStudentRequest) : HttpTask<RegistrationResponse> {
 		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.STUDENT)
 	}
 
 	/**
-	 * Ассинхронно отправляет запрос на авторизацию пользователя.
+	 * Асинхронно отправляет запрос на авторизацию пользователя.
 	 */
 	suspend fun makeAuthorizationRequest(request: AuthorizationRequest) : HttpTask<AuthenticationResponse> {
 		return withContext(Dispatchers.IO) {
@@ -126,7 +129,7 @@ final class AuthorizationRepository : KtorRepository() {
 	}
 
 	/**
-	 * Ассинхронно отправляет запрос на отзыв Refresh токена пользователя.
+	 * Асинхронно отправляет запрос на отзыв Refresh токена пользователя.
 	 * Обычно используется при выходе из аккаунта, дабы по данному токену другие не могли получить новый.
 	 */
 	suspend fun makeRevokeTokenRequest(refreshToken: String): HttpTask<Nothing> =
@@ -154,7 +157,7 @@ final class AuthorizationRepository : KtorRepository() {
 		}
 
 	/**
-	 * Ассинхронно отправляет запрос на обновление пароля пользователя.
+	 * Асинхронно отправляет запрос на обновление пароля пользователя.
 	 */
 	suspend fun makeUpdatePasswordRequest(activeToken: String, request: UpdatePasswordRequest): HttpTask<Nothing> =
 		withContext(Dispatchers.IO) {
@@ -182,6 +185,9 @@ final class AuthorizationRepository : KtorRepository() {
 			}
 		}
 
+	/**
+	 * Асинхронно делает запрос на обновление аккаунта школы.
+	 */
 	suspend fun makeUpdateSchoolRequest(activeToken: String, request: UpdateSchoolRequest): HttpTask<Boolean> =
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()
@@ -208,6 +214,9 @@ final class AuthorizationRepository : KtorRepository() {
 			}
 		}
 
+	/**
+	 * Assинхронно делает запрос на обновление аккаунта студента.
+	 */
 	suspend fun makeUpdateStudentRequest(activeToken: String, request: UpdateStudentRequest): HttpTask<Boolean> =
 		withContext(Dispatchers.IO) {
 			val httpClient = initClient()

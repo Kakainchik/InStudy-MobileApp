@@ -176,6 +176,7 @@ class CardStudentAdapter(private val dataSet: List<Card>) :
 	}
 
 	override fun onDestroyActionMode(mode: ActionMode?) {
+		//При выключении контекстного меню
 		multiSelect = false
 		selectedItems.clear()
 		notifyDataSetChanged()

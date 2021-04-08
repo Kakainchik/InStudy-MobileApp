@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AddCardRequest(val title: String,
-						  val content: String,
+						  val content: String?,
 						  val soughtCity: String,
-						  val faculty: String,
-						  val speciality: String)
+						  val faculty: String?,
+						  val speciality: String?)
 
 @Serializable
 data class UpdateCardRequest(val id: Long,

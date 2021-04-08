@@ -35,6 +35,9 @@ class QueryModeratorViewModel : StandardHttpViewModel {
 		dao = db.queryDao()
 	}
 
+	/**
+	 * Получает все запросы на регистрацию с сервера и сливает с локально базой данных.
+	 */
 	fun getAllFromServerAndMergeWithDB(currentAccount: Account) {
 		receivedLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
@@ -52,6 +55,9 @@ class QueryModeratorViewModel : StandardHttpViewModel {
 		}
 	}
 
+	/**
+	 * Получает реквизиты школы по её ID.
+	 */
 	fun getPropsBySchoolId(currentAccount: Account, id: Long) {
 		propsLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
@@ -63,6 +69,9 @@ class QueryModeratorViewModel : StandardHttpViewModel {
 		}
 	}
 
+	/**
+	 * Верифицирует запрос школы по её ID.
+	 */
 	fun verifyQuery(currentAccount: Account, id: Long) {
 		verifyLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
@@ -74,6 +83,9 @@ class QueryModeratorViewModel : StandardHttpViewModel {
 		}
 	}
 
+	/**
+	 * Отклоняет запрос школы по её ID.
+	 */
 	fun denyQuery(currentAccount: Account, id: Long, comment: String? = null) {
 		denyLiveData.postValue(HttpTask(TaskStatus.PROCESSING, null, WebStatus.NONE))
 		viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {

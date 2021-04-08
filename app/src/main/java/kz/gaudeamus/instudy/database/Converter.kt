@@ -5,6 +5,9 @@ import kz.gaudeamus.instudy.entities.CardStatus
 import java.time.LocalDate
 import java.util.stream.Collectors
 
+/**
+ * Конвертер для преобразования данных из SQLite в java объекты.
+ */
 class Converter {
 	@TypeConverter
 	fun fromLocalDate(date: LocalDate) : Long = date.toEpochDay()

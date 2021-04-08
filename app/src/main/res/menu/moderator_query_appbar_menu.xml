@@ -4,6 +4,6 @@
     <item android:id="@+id/appbar_refresh_query"
             android:enabled="true"
             android:title="@string/menu_refresh_card"
-            android:icon="@drawable/ic_sharp_refresh_24"
+            android:icon="@drawable/appbar_refresh_selector"
             app:showAsAction="ifRoom"/>
 </menu>

@@ -37,8 +37,8 @@
     <string name="error_same_file_exists">Такой файл уже есть.</string>
     <string name="menu_add_card">Создать карточку</string>
     <string name="menu_delete_card">Удалить</string>
-    <string name="error_http_timeout">Время ожидания от сервера истекло. Попробуйте ещё раз.</string>
-    <string name="error_http_connect">Не удаётся подключиться к серверу.</string>
+    <string name="error_http_timeout">Ошибка сети. Время ожидания от сервера истекло. Попробуйте ещё раз.</string>
+    <string name="error_http_connect">Ошибка сети. Не удаётся подключиться к серверу. Проверьте подключение к интернету!</string>
     <string name="error_unexpected">Непредвиденная ошибка. Попробуйте снова.</string>
     <string name="status_card_draft">Черновик</string>
     <string name="status_card_active">Активен</string>
@@ -48,8 +48,8 @@
     <string name="menu_refresh_card">Обновить</string>
     <string name="bt_save">Сохранить</string>
     <string name="title_written_city">Город, который я ищу</string>
-    <string name="title_written_speciality">Специальность, которую я ищу</string>
-    <string name="title_written_faculty">Факультет, который я ищу</string>
+    <string name="title_written_speciality">Специальность, которую я ищу(необязательно)</string>
+    <string name="title_written_faculty">Факультет, который я ищу(необязательно)</string>
     <string name="title_title">Заголовок</string>
     <string name="title_written_comment">Мои пожелания(необязательно)</string>
     <string name="error_fill_fields">Заполните поля!</string>
@@ -71,7 +71,7 @@
     <string name="title_query_information">Данные о запросе на регистрацию</string>
     <string name="title_query_created">Создан: %1$s</string>
     <string name="title_query_props">Сертификаты</string>
-    <string name="intent_open_with">Открыть с помощью...</string>
+    <string name="intent_open_with">Открыть с помощью…</string>
     <string name="bt_verify">Принять</string>
     <string name="bt_deny">Отклонить</string>
     <string name="title_attention">Внимание!</string>
@@ -113,4 +113,10 @@
     <string name="title_change_phone">Сменить номер:</string>
     <string name="notice_account_updated">Аккаунт обновлён успешно!</string>
     <string name="menu_search_with_dots">Поиск…</string>
+    <string name="alert_cancel_creating_card">Выйти без сохранения?</string>
+    <string name="bt_dont_save">Не сохранять</string>
+    <string name="title_not_indicated">Не указано</string>
+    <string name="bt_keep_draft">Оставить в черновике</string>
+    <string name="bt_publish">Опубликовать</string>
+    <string name="bt_edit">Редактировать</string>
 </resources>

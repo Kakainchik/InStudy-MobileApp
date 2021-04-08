@@ -133,7 +133,6 @@ class SignUpSchoolFragment : Fragment() {
                             this.loginInFragmentListener?.onBlockUI(true)
                             Toast.makeText(context, resource?.message, Toast.LENGTH_SHORT).show()
 
-                            //TODO: Переходим на фрагмент назад и показываем оповещение об ожидании подтверждения
                             this.loginInFragmentListener?.onFragmentInteraction(LoginInActivity.KindaFragment.SIGN_IN)
                             this.loginInFragmentListener?.onRegistered(AccountKind.SCHOOL)
                         }
@@ -153,7 +152,6 @@ class SignUpSchoolFragment : Fragment() {
         //Нажимаем на кнопку добавления файла
         addFileButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                val mimes =
                 setType("application/*")
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)

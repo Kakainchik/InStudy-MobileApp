@@ -37,7 +37,6 @@ class SignUpStudentFragment : Fragment() {
         val phoneLayout: TextInputLayout = view.findViewById(R.id.signup_student_phone_input)
         val nameText: TextInputEditText = view.findViewById(R.id.signup_student_name_text)
         val nameLayout: TextInputLayout = view.findViewById(R.id.signup_student_name_input)
-        //TODO: Проверять фамилию или нет?
         val surnameText: TextInputEditText = view.findViewById(R.id.signup_student_surname_text)
         val surnameLayout: TextInputLayout = view.findViewById(R.id.signup_student_surname_input)
 
@@ -104,7 +103,6 @@ class SignUpStudentFragment : Fragment() {
                             this.loginInFragmentListener?.onBlockUI(true)
                             Toast.makeText(context, resource?.message, Toast.LENGTH_SHORT).show()
 
-                            //TODO: Переходим на фрагмент назад и показываем оповещение об подтверждении почты
                             this.loginInFragmentListener?.onFragmentInteraction(LoginInActivity.KindaFragment.SIGN_IN)
                             this.loginInFragmentListener?.onRegistered(AccountKind.STUDENT)
                         }

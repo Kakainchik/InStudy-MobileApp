@@ -2,12 +2,15 @@ package kz.gaudeamus.instudy
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -23,6 +26,7 @@ import kz.gaudeamus.instudy.entities.PropsResponse
 import kz.gaudeamus.instudy.entities.SchoolQuery
 import kz.gaudeamus.instudy.models.HttpTask.*
 import kz.gaudeamus.instudy.models.QueryModeratorViewModel
+import org.xmlpull.v1.XmlPullParser
 
 class VerifyingQueryActivity : AppCompatActivity(), DenyQueryDialogFragment.DeniableListener {
 	//Визуальные компоненты
@@ -56,6 +60,7 @@ class VerifyingQueryActivity : AppCompatActivity(), DenyQueryDialogFragment.Deni
 		progressBar = findViewById(R.id.progressbar)
 		container = findViewById(R.id.verifying_query_container)
 		propsAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, props)
+		val propsBar = expandableLayout.parentLayout.findViewWithTag<ImageView>("props_progress_bar")
 
 		//В любом случае на эту страницу должна прийти сущность запроса
 		bundle = intent.getSerializableExtra(NAME_EXTRA) as SchoolQuery
@@ -92,7 +97,8 @@ class VerifyingQueryActivity : AppCompatActivity(), DenyQueryDialogFragment.Deni
 			queryModel.propsLiveData.observe(this, { storeData ->
 				when(storeData.taskStatus) {
 					TaskStatus.PROCESSING -> {
-						//TODO: анимация загрузки
+						//Анимация загрузки
+						propsBar.visibility = View.VISIBLE
 					}
 					TaskStatus.COMPLETED -> {
 						bundle.props = storeData.data!!.map<PropsResponse, String> { it.name }
@@ -102,6 +108,7 @@ class VerifyingQueryActivity : AppCompatActivity(), DenyQueryDialogFragment.Deni
 						}
 						propsAdapter.notifyDataSetChanged()
 						expandableLayout.expand()
+						propsBar.visibility = View.INVISIBLE
 					}
 					TaskStatus.CANCELED -> {
 						//При устаревшем токене - пробуем обновить его и отправить запрос заново
@@ -109,7 +116,7 @@ class VerifyingQueryActivity : AppCompatActivity(), DenyQueryDialogFragment.Deni
 							queryModel.throughRefreshToken(this, currentAccount) { newAccount ->
 								queryModel.getPropsBySchoolId(newAccount, bundle.id)
 							}
-						}
+						} else propsBar.visibility = View.INVISIBLE
 					}
 				}
 			})
