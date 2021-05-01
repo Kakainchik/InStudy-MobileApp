@@ -119,4 +119,9 @@
     <string name="bt_keep_draft">Оставить в черновике</string>
     <string name="bt_publish">Опубликовать</string>
     <string name="bt_edit">Редактировать</string>
+    <string name="error_organization_exist">Ошибка: Такая организация уже существует.</string>
+    <string name="error_user_email_exist">Ошибка: Пользователь с таким E-mail уже существует.</string>
+    <string name="error_phone_exist">Ошибка: Такой номер уже занят другим пользователем.</string>
+    <string name="notice_student_registration_success">Вы успешно зарегистрировались! Пожалуйста, подтвердите ваш email адрес.</string>
+    <string name="notice_school_registration_success">Вы были успешно зарегистрированы! Пожалуйста, подтверите ваш email адрес и ждите дальнейшего подтверждения от InStudy.</string>
 </resources>

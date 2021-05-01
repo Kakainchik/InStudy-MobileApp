@@ -42,9 +42,26 @@ final class AuthorizationRepository : KtorRepository() {
 			//Проверяем ответ
 			when(response.status) {
 				HttpStatusCode.OK -> HttpTask(TaskStatus.COMPLETED, body, WebStatus.NONE)
+				HttpStatusCode.BadRequest -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
+				HttpStatusCode.UnprocessableEntity -> HttpTask(TaskStatus.CANCELED, null, WebStatus.UNPROCESSABLE_ENTITY)
+				HttpStatusCode.MethodNotAllowed -> HttpTask(TaskStatus.CANCELED, null, WebStatus.METHOD_NOT_ALLOWED)
 				else -> HttpTask(TaskStatus.CANCELED, null, WebStatus.NONE)
 			}
 		}
+	}
+
+	/**
+	 * Асинхронно отправляет запрос на регистрацию школы
+	 */
+	suspend fun makeRegistrationRequest(request: RegistrationSchoolRequest) : HttpTask<RegistrationResponse> {
+		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.SCHOOL)
+	}
+
+	/**
+	 * Асинхронно отправляет запрос на регистрацию студента.
+	 */
+	suspend fun makeRegistrationRequest(request: RegistrationStudentRequest) : HttpTask<RegistrationResponse> {
+		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.STUDENT)
 	}
 
 	/**
@@ -75,20 +92,6 @@ final class AuthorizationRepository : KtorRepository() {
 				else -> null
 			}
 		}
-	}
-
-	/**
-	 * Асинхронно отправляет запрос на регистрацию школы
-	 */
-	suspend fun makeRegistrationRequest(request: RegistrationSchoolRequest) : HttpTask<RegistrationResponse> {
-		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.SCHOOL)
-	}
-
-	/**
-	 * Асинхронно отправляет запрос на регистрацию студента.
-	 */
-	suspend fun makeRegistrationRequest(request: RegistrationStudentRequest) : HttpTask<RegistrationResponse> {
-		return makeRegistrationRequest(Json { encodeDefaults = true }.encodeToString(request), AccountKind.STUDENT)
 	}
 
 	/**

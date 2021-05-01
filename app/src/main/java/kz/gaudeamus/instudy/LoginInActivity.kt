@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.commit
 import kz.gaudeamus.instudy.UIHelper.makeEnableUI
@@ -101,11 +102,11 @@ class LoginInActivity : AppCompatActivity(), OnLoginInFragmentListener {
         when(who) {
             //Показываем сообщение для школы
             AccountKind.SCHOOL -> {
-                //TODO: "Подтвердите email и ждите принятия от модератора"
+                Toast.makeText(this, getText(R.string.notice_school_registration_success), Toast.LENGTH_SHORT).show()
             }
             //Показываем сообщение для студента
             AccountKind.STUDENT -> {
-                //TODO: "Подтвердите email"
+                Toast.makeText(this, getText(R.string.notice_student_registration_success), Toast.LENGTH_SHORT).show()
             }
             //Модератор нерегестрируем
             else -> return

@@ -101,15 +101,20 @@ class SignUpStudentFragment : Fragment() {
                         TaskStatus.COMPLETED -> {
                             //Операция завершена, разблокируем интерфейс
                             this.loginInFragmentListener?.onBlockUI(true)
-                            Toast.makeText(context, resource?.message, Toast.LENGTH_SHORT).show()
 
                             this.loginInFragmentListener?.onFragmentInteraction(LoginInActivity.KindaFragment.SIGN_IN)
                             this.loginInFragmentListener?.onRegistered(AccountKind.STUDENT)
                         }
                         TaskStatus.CANCELED -> {
                             //Операция отменена, разблокируем интерфейс и выводим сообщение
+                            when(storeData.webStatus) {
+                                WebStatus.METHOD_NOT_ALLOWED ->
+                                    Toast.makeText(context, getText(R.string.error_user_email_exist), Toast.LENGTH_SHORT).show()
+                                WebStatus.UNPROCESSABLE_ENTITY ->
+                                    Toast.makeText(context, getText(R.string.error_phone_exist), Toast.LENGTH_SHORT).show()
+                                else -> UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
+                            }
                             this.loginInFragmentListener?.onBlockUI(true)
-                            UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
                         }
                     }
                 })

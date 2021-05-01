@@ -21,6 +21,8 @@ data class HttpTask<D>(val taskStatus: TaskStatus, val data: D?, val webStatus: 
 		NONE,
 		TIMEOUT,
 		UNABLE_CONNECT,
-		UNAUTHORIZED
+		UNAUTHORIZED,
+		METHOD_NOT_ALLOWED,
+		UNPROCESSABLE_ENTITY
 	}
 }

@@ -123,4 +123,9 @@
     <string name="bt_keep_draft">Keep in draft</string>
     <string name="bt_publish">Publish</string>
     <string name="bt_edit">Edit</string>
+    <string name="error_organization_exist">Error: Such an organization already exists.</string>
+    <string name="error_user_email_exist">Error: User with such email already exists.</string>
+    <string name="error_phone_exist">Error: User with such a number phone already exists.</string>
+    <string name="notice_student_registration_success">You have registered successfully! Now please verify your email address.</string>
+    <string name="notice_school_registration_success">You have been registered successfully! Now please verify your email address and then await when InStudy will check your props.</string>
 </resources>

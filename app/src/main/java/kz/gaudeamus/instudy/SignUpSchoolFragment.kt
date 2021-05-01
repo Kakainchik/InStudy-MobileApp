@@ -138,8 +138,14 @@ class SignUpSchoolFragment : Fragment() {
                         }
                         TaskStatus.CANCELED -> {
                             //Операция отменена, разблокируем интерфейс и выводим сообщение
+                            when(storeData.webStatus) {
+                                WebStatus.METHOD_NOT_ALLOWED ->
+                                    Toast.makeText(context, getText(R.string.error_user_email_exist), Toast.LENGTH_SHORT).show()
+                                WebStatus.UNPROCESSABLE_ENTITY ->
+                                    Toast.makeText(context, getText(R.string.error_organization_exist), Toast.LENGTH_SHORT).show()
+                                else -> UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
+                            }
                             this.loginInFragmentListener?.onBlockUI(true)
-                            UIHelper.toastInternetConnectionError(requireContext(), storeData.webStatus)
                         }
                     }
                 })
